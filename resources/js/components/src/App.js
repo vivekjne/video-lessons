@@ -11,6 +11,7 @@ import { ConnectedRouter } from "connected-react-router";
 import { history } from "./redux/configureStore";
 import PrivateRoute from "./helpers/privateRoute";
 import Example from "./containers/Example";
+import Home from "./containers/website/Home";
 // import Admin from "./containers/Admin";
 
 const Admin = lazy(() => import("./containers/Admin"));
@@ -30,7 +31,8 @@ class App extends React.Component {
                                 ) : (
                                     <Redirect to="/login" />
                                 )} */}
-                                <Redirect to="/admin" />
+                                {/* <Redirect to="/admin" /> */}
+                                <Home />
                             </Route>
                             <Route path="/admin">
                                 <Admin />
