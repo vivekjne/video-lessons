@@ -22,6 +22,8 @@ import WorkIcon from "@material-ui/icons/Work";
 
 import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
+import CollectionsBookmarkIcon from "@material-ui/icons/CollectionsBookmark";
+
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import { mainListItems, secondaryListItems } from "./listItems";
@@ -178,18 +180,18 @@ export default function Sidebar({ children, handleDrawerClose, open }) {
 
                 <ListItem
                     className={
-                        location.pathname === `${url}/orders`
+                        location.pathname === `${url}/subjects`
                             ? classes.listActive
                             : classes.list
                     }
                     button
                     component={Link}
-                    to={`${url}/orders`}
+                    to={`${url}/subjects`}
                 >
                     <ListItemIcon className={classes.listIcon}>
-                        <ShoppingCartIcon fontSize="inherit" />
+                        <CollectionsBookmarkIcon fontSize="inherit" />
                     </ListItemIcon>
-                    <ListItemText primary="Orders" />
+                    <ListItemText primary="Subjects" />
                 </ListItem>
                 <ListItem
                     className={

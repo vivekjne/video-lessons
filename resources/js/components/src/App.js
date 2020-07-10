@@ -11,9 +11,9 @@ import { ConnectedRouter } from "connected-react-router";
 import { history } from "./redux/configureStore";
 import PrivateRoute from "./helpers/privateRoute";
 import Example from "./containers/Example";
-import Admin from "./containers/Admin";
+// import Admin from "./containers/Admin";
 
-// const LoginPage = lazy(() => import("./containers/LoginPage"));
+const Admin = lazy(() => import("./containers/Admin"));
 
 class App extends React.Component {
     render() {

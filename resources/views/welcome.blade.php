@@ -12,6 +12,7 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
       />
+      <link rel="stylesheet" href="//cdn.quilljs.com/1.2.6/quill.snow.css">
       
     </head>
     <body>

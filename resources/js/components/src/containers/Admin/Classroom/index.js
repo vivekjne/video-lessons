@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, lazy } from "react";
 import { Route, useRouteMatch, Switch } from "react-router-dom";
-import ClassroomList from "./List";
-import ClassroomAdd from "./Add";
-import ClassroomEdit from "./Edit";
+
+const ClassroomList = lazy(() => import("./List"));
+const ClassroomAdd = lazy(() => import("./Add"));
+const ClassroomEdit = lazy(() => import("./Edit"));
 
 const Curricullum = () => {
     const { path, url } = useRouteMatch();

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -29,14 +29,22 @@ import {
     useRouteMatch,
     Redirect
 } from "react-router-dom";
-import Example from "../Example";
-import Dashboard from "./Dashboard";
-import Orders from "./Orders";
-import Customers from "./Customers";
-import Products from "./Classroom";
+// import Example from "../Example";
+// import Dashboard from "./Dashboard";
 
-import Curricullum from "./Curricullum";
-import Classroom from "./Classroom";
+// import Customers from "./Customers";
+
+// import Curricullum from "./Curricullum";
+// import Classroom from "./Classroom";
+// import Subject from "./Subjects";
+
+const Dashboard = lazy(() => import("./Dashboard"));
+const Curricullum = lazy(() => import("./Curricullum"));
+const Customers = lazy(() => import("./Customers"));
+
+const Classroom = lazy(() => import("./Classroom"));
+const Subject = lazy(() => import("./Subjects"));
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -154,7 +162,7 @@ export default function Admin() {
                             path={`/admin/curricullums`}
                             component={Curricullum}
                         />
-                        <Route path={`/admin/orders`} component={Orders} />
+                        <Route path={`/admin/subjects`} component={Subject} />
                         <Route
                             path={`/admin/customers`}
                             component={Customers}

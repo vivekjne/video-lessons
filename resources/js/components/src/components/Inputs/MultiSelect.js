@@ -66,7 +66,7 @@ function getStyles(name, personName, theme) {
     };
 }
 
-export default function MultipleSelect() {
+export default function MultipleSelect({ label }) {
     const classes = useStyles();
     const theme = useTheme();
     const [personName, setPersonName] = React.useState([]);
@@ -88,8 +88,8 @@ export default function MultipleSelect() {
 
     return (
         <div>
-            <FormControl className={classes.formControl}>
-                <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
+            <FormControl required className={classes.formControl}>
+                <InputLabel id="demo-mutiple-chip-label">{label}</InputLabel>
                 <Select
                     fullWidth
                     labelId="demo-mutiple-chip-label"
