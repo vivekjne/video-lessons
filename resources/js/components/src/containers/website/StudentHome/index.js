@@ -11,7 +11,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Avatar from "@material-ui/core/Avatar";
-import { grey } from "@material-ui/core/colors";
+import { grey, purple } from "@material-ui/core/colors";
 
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteOutlined from "@material-ui/icons/FavoriteBorderOutlined";
@@ -24,6 +24,7 @@ import SubjectCard from "../../../components/website/Cards/SubjectCard";
 import { BounceLoader } from "react-spinners";
 import Axios from "axios";
 import { Route, Switch } from "react-router-dom";
+import SubjectDetail from "../SubjectDetail";
 const useStyles = makeStyles(theme => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
@@ -55,7 +56,7 @@ export default function StudentHome() {
     return (
         <>
             <AppBar
-                style={{ background: "#845EC2" }}
+                style={{ background: purple[900] }}
                 elevation={0}
                 position="fixed"
             >
@@ -94,7 +95,9 @@ export default function StudentHome() {
                     lessons
                 </Route>
 
-                <Route path="/subject/:slug/:id">subjects</Route>
+                <Route path="/subject/:slug/:id">
+                    <SubjectDetail />
+                </Route>
             </Switch>
         </>
     );
