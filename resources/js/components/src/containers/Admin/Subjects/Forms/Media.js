@@ -69,11 +69,13 @@ const useStyles = makeStyles(theme => ({
 const steps = ["Basic", "Media", "Finish"];
 // const subjectOptions = ["Physics", "Chemistry", "Maths"];
 
-function MediaForm(step) {
+function MediaForm({ formik }) {
     const classes = useStyles();
     const [text, setText] = useState("");
     const [previewUrl, setPreviewUrl] = useState("");
     const thumbnailRef = useRef();
+    const imageRef = useRef();
+
     return (
         <Grid container direction="column">
             <Grid className={classes.inputSpacer} item>
@@ -81,7 +83,15 @@ function MediaForm(step) {
                     fullWidth
                     label="Preview Url"
                     variant="standard"
-                    helperText="Provide a preview url link for the subject from youtube,vimeo,etc..."
+                    {...formik.getFieldProps("preview_url")}
+                    helperText={
+                        (formik.touched.preview_url &&
+                            formik.errors.preview_url) ||
+                        "Provide a preview url link for the subject from youtube,vimeo,etc..."
+                    }
+                    error={
+                        formik.touched.preview_url && formik.errors.preview_url
+                    }
                 />
             </Grid>
 
@@ -99,8 +109,18 @@ function MediaForm(step) {
                             ref={thumbnailRef}
                             type="file"
                             style={{ display: "none" }}
+                            onChange={e =>
+                                formik.setFieldValue(
+                                    "thumbnail",
+                                    e.target.files[0]
+                                )
+                            }
                         />
                         <ThumbnailCard
+                            src={
+                                formik.values.thumbnail &&
+                                URL.createObjectURL(formik.values.thumbnail)
+                            }
                             onClick={() => thumbnailRef.current.click()}
                         />
                     </Grid>

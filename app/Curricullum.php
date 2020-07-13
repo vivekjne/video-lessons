@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Curricullum extends Model
 {
-    
-    public function classrooms(){
-        return $this->belongsToMany(Classroom::class);
 
+    public function classrooms()
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_curricullums');
     }
 }

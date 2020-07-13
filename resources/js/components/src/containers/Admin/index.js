@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -150,23 +150,30 @@ export default function Admin() {
                         <Route exact path={path}>
                             <Redirect to="/admin/dashboard" />
                         </Route>
-                        <Route
-                            path={`/admin/dashboard`}
-                            component={Dashboard}
-                        />
-                        <Route
-                            path={`/admin/classrooms`}
-                            component={Classroom}
-                        />
-                        <Route
-                            path={`/admin/curricullums`}
-                            component={Curricullum}
-                        />
-                        <Route path={`/admin/subjects`} component={Subject} />
-                        <Route
-                            path={`/admin/customers`}
-                            component={Customers}
-                        />
+
+                        <Suspense fallback={<div>loading admin...</div>}>
+                            <Route
+                                path={`/admin/dashboard`}
+                                component={Dashboard}
+                            />
+
+                            <Route
+                                path={`/admin/classrooms`}
+                                component={Classroom}
+                            />
+                            <Route
+                                path={`/admin/curricullums`}
+                                component={Curricullum}
+                            />
+                            <Route
+                                path={`/admin/subjects`}
+                                component={Subject}
+                            />
+                            <Route
+                                path={`/admin/customers`}
+                                component={Customers}
+                            />
+                        </Suspense>
                     </Switch>
                 </Container>
             </main>

@@ -16,11 +16,15 @@ class CreateLessonsTable extends Migration
         Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('short_description');
-            $table->text('description')->nullable();
-            $table->boolean('isActive')->default(false);
-            $table->integer('total_views')->default(0);
-            $table->foreignId('curricullum_classroom_subject_id')->constrained('curricullum_classroom_subjects')->onDelete('cascade');
+            $table->string('slug');
+            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
+
+            $table->foreignId('section_id')->constrained()->onDelete('cascade');
+            $table->text('summary')->nullable();
+            $table->string('video_url')->nullable();
+            $table->bigInteger('video_views')->default(0)->nullable();
+            $table->string('duration')->nullable();
+            $table->integer('order')->nullable();
             $table->timestamps();
         });
     }

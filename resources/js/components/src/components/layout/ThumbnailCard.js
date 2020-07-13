@@ -17,15 +17,15 @@ const useStyles = makeStyles({
     }
 });
 
-export default function ThumbnailCard({ onClick }) {
+export default function ThumbnailCard({ onClick, src }) {
     const classes = useStyles();
-
+    console.log({ src });
     return (
         <Card className={classes.root}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image="https://via.placeholder.com/600"
+                    image={src || "https://via.placeholder.com/600"}
                     title="Contemplative Reptile"
                 />
             </CardActionArea>

@@ -11,10 +11,12 @@ import { ConnectedRouter } from "connected-react-router";
 import { history } from "./redux/configureStore";
 import PrivateRoute from "./helpers/privateRoute";
 import Example from "./containers/Example";
-import Home from "./containers/website/Home";
+// import Home from "./containers/website/Home";
+// import StudentHome from "./containers/website/StudentHome";
 // import Admin from "./containers/Admin";
 
 const Admin = lazy(() => import("./containers/Admin"));
+const StudentHome = lazy(() => import("./containers/website/StudentHome"));
 
 class App extends React.Component {
     render() {
@@ -23,23 +25,28 @@ class App extends React.Component {
         return (
             <Router>
                 <>
-                    <Suspense fallback={<div>loading...</div>}>
-                        <Switch>
-                            <Route exact path="/">
+                    <Switch>
+                        <Route path="/admin">
+                            <Suspense fallback={<div>loading...</div>}>
+                                <Admin />
+                            </Suspense>
+                        </Route>
+
+                        <Route path="/">
+                            <Suspense fallback={<div>loading...</div>}>
                                 {/* {isLoggedIn ? (
                                     <Redirect to="/dashboard" />
                                 ) : (
                                     <Redirect to="/login" />
                                 )} */}
                                 {/* <Redirect to="/admin" /> */}
-                                <Home />
-                            </Route>
-                            <Route path="/admin">
-                                <Admin />
-                            </Route>
-                            <Route component={<div>404</div>} />
-                        </Switch>
-                    </Suspense>
+                                {/* <Home /> */}
+                                <StudentHome />
+                            </Suspense>
+                        </Route>
+
+                        <Route component={<div>404</div>} />
+                    </Switch>
                 </>
             </Router>
         );

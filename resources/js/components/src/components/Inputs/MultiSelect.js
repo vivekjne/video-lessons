@@ -5,11 +5,14 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+
 import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 import Chip from "@material-ui/core/Chip";
 import { teal } from "@material-ui/core/colors";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -43,68 +46,49 @@ const MenuProps = {
     }
 };
 
-const names = [
-    "Oliver Hansen",
-    "Van Henry",
-    "April Tucker",
-    "Ralph Hubbard",
-    "Omar Alexander",
-    "Carlos Abbott",
-    "Miriam Wagner",
-    "Bradley Wilkerson",
-    "Virginia Andrews",
-    "Kelly Snyder"
-];
-
-function getStyles(name, personName, theme) {
+function getStyles(data, selected, theme) {
     return {
         fontWeight:
-            personName.indexOf(name) === -1
+            selected.findIndex(s => s.id === data.id) === -1
                 ? theme.typography.fontWeightRegular
                 : theme.typography.fontWeightMedium,
-        backgroundColor: personName.indexOf(name) === -1 ? "white" : teal[100]
+        backgroundColor:
+            selected.findIndex(s => s.id === data.id) === -1
+                ? "white"
+                : teal[100]
     };
 }
 
-export default function MultipleSelect({ label }) {
+export default function MultipleSelect({
+    label,
+    data,
+    selected,
+    handleChange,
+    handleChangeMultiple,
+    error
+}) {
     const classes = useStyles();
     const theme = useTheme();
-    const [personName, setPersonName] = React.useState([]);
-
-    const handleChange = event => {
-        setPersonName(event.target.value);
-    };
-
-    const handleChangeMultiple = event => {
-        const { options } = event.target;
-        const value = [];
-        for (let i = 0, l = options.length; i < l; i += 1) {
-            if (options[i].selected) {
-                value.push(options[i].value);
-            }
-        }
-        setPersonName(value);
-    };
-
+    console.log({ selected });
     return (
         <div>
-            <FormControl required className={classes.formControl}>
+            <FormControl error={error} className={classes.formControl}>
                 <InputLabel id="demo-mutiple-chip-label">{label}</InputLabel>
                 <Select
                     fullWidth
                     labelId="demo-mutiple-chip-label"
                     id="demo-mutiple-chip"
                     multiple
-                    value={personName}
+                    value={selected}
                     onChange={handleChange}
                     input={<Input id="select-multiple-chip" />}
                     renderValue={selected => (
                         <div className={classes.chips}>
                             {selected.map(value => (
                                 <Chip
-                                    key={value}
+                                    key={value.id}
                                     // onDelete={e => e.stopPropagation()}
-                                    label={value}
+                                    label={value.name}
                                     className={classes.chip}
                                 />
                             ))}
@@ -112,16 +96,17 @@ export default function MultipleSelect({ label }) {
                     )}
                     MenuProps={MenuProps}
                 >
-                    {names.map(name => (
+                    {data.map(d => (
                         <MenuItem
-                            key={name}
-                            value={name}
-                            style={getStyles(name, personName, theme)}
+                            key={d.id}
+                            value={d}
+                            style={getStyles(d, selected, theme)}
                         >
-                            {name}
+                            {d.name}
                         </MenuItem>
                     ))}
                 </Select>
+                <FormHelperText>{error}</FormHelperText>
             </FormControl>
         </div>
     );

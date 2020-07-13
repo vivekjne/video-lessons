@@ -8,29 +8,26 @@ import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { teal } from "@material-ui/core/colors";
+import Axios from "axios";
+import moment from "moment";
+import curricullumClient from "../../../api/curricullumClient";
 
 const CurricullumList = () => {
+    const [data, setData] = useState([]);
+    async function fetchCurricullums() {
+        try {
+            const response = await curricullumClient.getCurricullums();
+            console.log({ response: response.data });
+            setData(response.data.data);
+        } catch (err) {
+            console.log(err.response);
+        }
+    }
+    React.useEffect(() => {
+        fetchCurricullums();
+    }, []);
     const history = useHistory();
     const { path } = useRouteMatch();
-
-    const [data, setData] = useState([
-        {
-            id: 1,
-            name: "CBSE",
-            slug: "cbse-syllabus",
-            isActive: false,
-            created_at: "9-07-2020",
-            updated_at: "9-07-2020"
-        },
-        {
-            id: 2,
-            name: "ICSE",
-            slug: "icse-syllabus",
-            isActive: true,
-            created_at: "9-07-2020",
-            updated_at: "9-07-2020"
-        }
-    ]);
 
     const handleChange = (e, rowData) => {
         console.log(rowData);
@@ -66,8 +63,28 @@ const CurricullumList = () => {
                                 />
                             )
                         },
-                        { title: "Created At", field: "created_at" },
-                        { title: "Updated At", field: "updated_at" }
+                        {
+                            title: "Created At",
+                            field: "created_at",
+                            render: rowData => (
+                                <Typography variant="inherit">
+                                    {moment(rowData.created_at).format(
+                                        "DD-MM-YYYY"
+                                    )}
+                                </Typography>
+                            )
+                        },
+                        {
+                            title: "Updated At",
+                            field: "updated_at",
+                            render: rowData => (
+                                <Typography variant="inherit">
+                                    {moment(rowData.updated_at).format(
+                                        "DD-MM-YYYY"
+                                    )}
+                                </Typography>
+                            )
+                        }
                     ]}
                     data={data}
                     title="Curricullum List"

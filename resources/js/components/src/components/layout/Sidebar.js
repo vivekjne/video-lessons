@@ -180,7 +180,7 @@ export default function Sidebar({ children, handleDrawerClose, open }) {
 
                 <ListItem
                     className={
-                        location.pathname === `${url}/subjects`
+                        location.pathname.includes("subjects")
                             ? classes.listActive
                             : classes.list
                     }

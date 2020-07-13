@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classroom;
-use App\CurricullumClassroom;
+use App\ClassroomCurricullum;
 use App\CurricullumClassroomSubject;
 use App\Http\Resources\Classroom as ClassroomResource;
 use App\Http\Resources\ClassroomCollection as ClassroomCollectionResource;
@@ -24,41 +24,6 @@ class ClassroomController extends Controller
     {
 
         return  ClassroomResource::collection(Classroom::all());
-        //
-        // try{
-        //     $classrooms = Classroom::with('curricullums')->get();
-
-        //     if($classrooms){
-        //         $message = 'Classrooms fetched successfully';
-        //     }else{
-        //         $message = 'No classrooms found';
-        //     }
-
-        //     return ['data'=>$classrooms,'message'=>$message,'status'=>true];
-        // }catch(Exception $e){
-        //     return ['data'=>$classrooms,'message'=>$e->message,'status'=>false];
-        // }
-
-
-
-
-        // $data = CurricullumClassroom::with('subjects')->get();
-
-        // foreach($data as $i=>$d){
-        //     // return $d;
-        //     foreach($d->subjects as $j=>$subject){
-        //          $ccid =  $subject->pivot->curricullum_classroom_id;
-        //          $sid = $subject->pivot->subject_id;
-        //         $lessons_data = CurricullumClassroomSubject::where(['curricullum_classroom_id'=>$ccid,'subject_id'=>$sid])->with('lessons')->get();
-
-        //     //    return $lessons_data;
-
-        //         $data[$i]->subjects[$j]->lessons_data = $lessons_data;
-        //         // return $data;
-        //     }
-
-        // }
-        // return ['data'=>$data];
     }
 
     /**
@@ -79,12 +44,13 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => "required|unique:classrooms",
+            // 'curricullum_ids' => "required|array"
+        ]);
         //
         // dd($request->curricullum_ids);
-        $classroom_exists = Classroom::where('name', strtolower($request->name))->exists();
-        if ($classroom_exists) {
-            return ['message' => 'Classroom with name ' . $request->name . ' already exits.', 'status' => false];
-        }
+
         $classroom = new Classroom;
         $classroom->name = $request->name;
         if (strpos($request->name, 'class') !== false || strpos($request->name, 'Class') !== false) {
@@ -93,24 +59,26 @@ class ClassroomController extends Controller
             $classroom->slug = Str::slug('Class ' . strtolower($request->name), '-');
         }
         $classroom->isActive = isset($request->isActive) ? $request->isActive : true;
+        $classroom->save();
+        return ['data' => new ClassroomResource($classroom), 'message' => 'Classroom with name ' . $classroom->name . ' created successfully'];
 
-        try {
-            \DB::beginTransaction();
-            $classroom->save();
+        // try {
+        //     \DB::beginTransaction();
+        //     $classroom->save();
 
-            foreach ($request->curricullum_ids as $cur) {
-                // dd($classroom->id);
-                $curricullumClassroom_array[] = ['classroom_id' => $classroom->id, 'curricullum_id' => $cur];
-                // CurricullumClassroom::create(['classroom_id'=>$classroom->id,'curricullum_id'=>$cur]);
-            }
-            //  dd($curricullumClassroom_array);
-            CurricullumClassroom::insert($curricullumClassroom_array);
-            \DB::commit();
+        //     foreach ($request->curricullum_ids as $cur) {
+        //         // dd($classroom->id);
+        //         $curricullumClassroom_array[] = ['classroom_id' => $classroom->id, 'curricullum_id' => $cur];
+        //         // CurricullumClassroom::create(['classroom_id'=>$classroom->id,'curricullum_id'=>$cur]);
+        //     }
+        //     //  dd($curricullumClassroom_array);
+        //     ClassroomCurricullum::insert($curricullumClassroom_array);
+        //     \DB::commit();
 
-            return ['data' => new ClassroomResource($classroom), 'message' => 'Classroom with name ' . $classroom->name . ' created successfully'];
-        } catch (Throwable $e) {
-            \DB::rollback();
-        }
+        //     return ['data' => new ClassroomResource($classroom), 'message' => 'Classroom with name ' . $classroom->name . ' created successfully'];
+        // } catch (Throwable $e) {
+        //     \DB::rollback();
+        // }
     }
 
     /**
@@ -169,7 +137,7 @@ class ClassroomController extends Controller
                 try {
                     \DB::beginTransaction();
                     $classroom->save();
-                    CurricullumClassroom::where('classroom_id', $classroom->id)->delete();
+                    ClassroomCurricullum::where('classroom_id', $classroom->id)->delete();
 
 
                     foreach ($request->curricullum_ids as $cur) {
@@ -178,7 +146,7 @@ class ClassroomController extends Controller
                         // CurricullumClassroom::create(['classroom_id'=>$classroom->id,'curricullum_id'=>$cur]);
                     }
                     //  dd($curricullumClassroom_array);
-                    CurricullumClassroom::insert($curricullumClassroom_array);
+                    ClassroomCurricullum::insert($curricullumClassroom_array);
                     \DB::commit();
                 } catch (Exception $e) {
                     \DB::rollback();

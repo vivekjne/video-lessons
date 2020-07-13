@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import TextField from "../../../components/Inputs/TextField";
 import Grid from "@material-ui/core/Grid";
 import Heading from "../../../components/layout/Heading";
@@ -7,7 +7,7 @@ import Button from "../../../components/Inputs/Button";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { teal } from "@material-ui/core/colors";
-import { Container } from "@material-ui/core";
+import { Container, CircularProgress } from "@material-ui/core";
 import MultipleSelect from "../../../components/Inputs/MultiSelect";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -20,6 +20,13 @@ import MediaForm from "./Forms/Media";
 import SeoForm from "./Forms/Seo";
 import { useHistory } from "react-router-dom";
 import CustomSnackbar from "../../../components/layout/CustomSnackbar";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import subjectClient from "../../../api/subjectClient";
+import curricullumClient from "../../../api/curricullumClient";
+import classroomClient from "../../../api/classroomClient";
+import Axios from "axios";
+
 const useStyles = makeStyles(theme => ({
     appBar: {
         position: "relative"
@@ -62,33 +69,37 @@ const useStyles = makeStyles(theme => ({
 
 const steps = ["Basic", "Media", "Seo"];
 
-function getStepContent(step) {
-    const classes = useStyles();
-    switch (step) {
-        case 0:
-            return <BasicForm />;
-        case 1:
-            return <MediaForm />;
-        case 2:
-            return <SeoForm />;
-        default:
-            throw new Error("Unknown step");
-    }
-}
-
 const SubjectAdd = () => {
     const history = useHistory();
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const [isSuccess, setIsSuccess] = React.useState(false);
     const [message, setMessage] = React.useState(false);
+    const [isSubmitted, setSubmitted] = React.useState(false);
+    const [isLoading, setLoading] = React.useState(true);
+    const [curricullums, setCurricullums] = React.useState([]);
+    const [classrooms, setClassrooms] = React.useState([]);
+    const [basicForm, setBasicForm] = useState({
+        name: "",
+        display_name: "",
+        short_description: "",
+        description: "",
+        classroom_id: undefined,
+        curricullum_id: undefined
+    });
 
+    const [mediaForm, setMediaForm] = useState({
+        preview_url: ""
+    });
+
+    const [seoForm, setSeoForm] = useState({
+        meta_tags: [],
+        meta_description: ""
+    });
     const handleNext = () => {
         if (activeStep == steps.length - 1) {
             setMessage("Subject added successfully!");
             setIsSuccess(true);
-
-            history.push("/admin/subjects/1");
         }
         setActiveStep(activeStep + 1);
     };
@@ -97,13 +108,30 @@ const SubjectAdd = () => {
         setActiveStep(activeStep - 1);
     };
 
+    React.useEffect(() => {
+        async function getInitialData() {
+            try {
+                const curricullumResponse = await curricullumClient.getCurricullums();
+                const classroomResponse = await classroomClient.getClassrooms();
+                setCurricullums(curricullumResponse.data.data);
+                setClassrooms(classroomResponse.data.data);
+            } catch (err) {
+                console.log(err);
+            }
+
+            setLoading(false);
+        }
+
+        getInitialData();
+    }, []);
+
     return (
         <>
             <Heading title="Add Subject" disableAction />
 
             <Paper elevation={2} className={classes.paper}>
                 <Typography component="h1" variant="h4" align="center">
-                    Checkout
+                    Add New Subject
                 </Typography>
                 <Stepper activeStep={activeStep} className={classes.stepper}>
                     {steps.map(label => (
@@ -113,42 +141,220 @@ const SubjectAdd = () => {
                     ))}
                 </Stepper>
                 <React.Fragment>
-                    {activeStep === steps.length ? (
-                        <React.Fragment>
-                            <Typography variant="h5" gutterBottom>
-                                Thank you for your order.
-                            </Typography>
-                            <Typography variant="subtitle1">
-                                Your order number is #2001539. We have emailed
-                                your order confirmation, and will send you an
-                                update when your order has shipped.
-                            </Typography>
-                        </React.Fragment>
-                    ) : (
-                        <Container maxWidth="sm">
-                            {getStepContent(activeStep)}
-                            <div className={classes.buttons}>
-                                {activeStep !== 0 && (
-                                    <MaterialButton
-                                        onClick={handleBack}
-                                        className={classes.button}
-                                    >
-                                        Back
-                                    </MaterialButton>
-                                )}
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleNext}
-                                    className={classes.button}
-                                >
-                                    {activeStep === steps.length - 1
-                                        ? "Submit"
-                                        : "Next"}
-                                </Button>
+                    <Container maxWidth="md">
+                        {isLoading ? (
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <CircularProgress />
                             </div>
-                        </Container>
-                    )}
+                        ) : (
+                            <>
+                                {activeStep == 0 && (
+                                    <Formik
+                                        initialValues={basicForm}
+                                        validationSchema={Yup.object({
+                                            name: Yup.string()
+                                                .max(200)
+                                                .required(),
+                                            display_name: Yup.string()
+                                                .max(200)
+                                                .required(),
+                                            short_description: Yup.string().max(
+                                                255
+                                            ),
+                                            description: Yup.string().max(2000),
+                                            curricullum_id: Yup.number().required(),
+                                            classroom_id: Yup.number().required()
+                                        })}
+                                        onSubmit={(values, formik) => {
+                                            console.log({ values });
+                                            setBasicForm(values);
+                                            handleNext();
+                                        }}
+                                    >
+                                        {formik => (
+                                            <form
+                                                onSubmit={formik.handleSubmit}
+                                            >
+                                                <BasicForm
+                                                    classrooms={classrooms}
+                                                    curricullums={curricullums}
+                                                    formik={formik}
+                                                />
+                                                <div
+                                                    className={classes.buttons}
+                                                >
+                                                    {/* <MaterialButton
+                                            onClick={handleBack}
+                                            className={classes.button}
+                                        >
+                                            Back
+                                        </MaterialButton> */}
+
+                                                    <Button
+                                                        type="submit"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        // onClick={handleNext}
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                    >
+                                                        Next
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        )}
+                                    </Formik>
+                                )}
+
+                                {activeStep == 1 && (
+                                    <Formik
+                                        initialValues={mediaForm}
+                                        validationSchema={Yup.object({
+                                            preview_url: Yup.string()
+                                        })}
+                                        onSubmit={(values, formik) => {
+                                            console.log({ values });
+                                            setMediaForm(values);
+                                            handleNext();
+                                        }}
+                                    >
+                                        {formik => (
+                                            <form
+                                                onSubmit={formik.handleSubmit}
+                                            >
+                                                <MediaForm formik={formik} />
+                                                <div
+                                                    className={classes.buttons}
+                                                >
+                                                    <MaterialButton
+                                                        onClick={handleBack}
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                    >
+                                                        Back
+                                                    </MaterialButton>
+
+                                                    <Button
+                                                        type="submit"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        // onClick={handleNext}
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                    >
+                                                        Next
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        )}
+                                    </Formik>
+                                )}
+
+                                {activeStep == 2 && (
+                                    <Formik
+                                        initialValues={seoForm}
+                                        validationSchema={Yup.object({
+                                            meta_tags: Yup.array(),
+                                            meta_description: Yup.string()
+                                        })}
+                                        onSubmit={async (values, formik) => {
+                                            setSeoForm(values);
+
+                                            const submitValues = {
+                                                ...mediaForm,
+                                                ...values,
+                                                ...basicForm
+                                            };
+                                            console.log({
+                                                values: submitValues
+                                            });
+                                            setSubmitted(true);
+                                            const formData = new FormData();
+                                            Object.keys(submitValues).forEach(
+                                                key => {
+                                                    formData.append(
+                                                        key,
+                                                        submitValues[key]
+                                                    );
+                                                }
+                                            );
+                                            try {
+                                                const response = await Axios.post(
+                                                    "/api/subjects",
+                                                    formData,
+                                                    {
+                                                        headers: {
+                                                            "Content-Type":
+                                                                "multipart/formdata"
+                                                        }
+                                                    }
+                                                );
+                                                console.log({
+                                                    response: response.data
+                                                });
+                                                history.push(
+                                                    "/admin/subjects/" +
+                                                        response.data.data.id
+                                                );
+                                            } catch (err) {
+                                                console.log({ err });
+                                            }
+                                            setSubmitted(false);
+                                        }}
+                                    >
+                                        {formik => (
+                                            <form
+                                                onSubmit={formik.handleSubmit}
+                                            >
+                                                <SeoForm formik={formik} />
+
+                                                <div
+                                                    className={classes.buttons}
+                                                >
+                                                    <MaterialButton
+                                                        onClick={handleBack}
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                    >
+                                                        Back
+                                                    </MaterialButton>
+
+                                                    <Button
+                                                        type="submit"
+                                                        variant="contained"
+                                                        color="primary"
+                                                        disabled={isSubmitted}
+                                                        // onClick={handleNext}
+                                                        className={
+                                                            classes.button
+                                                        }
+                                                    >
+                                                        Submit{" "}
+                                                        {isSubmitted && (
+                                                            <CircularProgress
+                                                                size={15}
+                                                                color="primary"
+                                                            />
+                                                        )}
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        )}
+                                    </Formik>
+                                )}
+                            </>
+                        )}
+                    </Container>
                 </React.Fragment>
             </Paper>
 

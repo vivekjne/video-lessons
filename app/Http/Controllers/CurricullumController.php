@@ -53,21 +53,21 @@ class CurricullumController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-        $curricullum_exists = Curricullum::where(['name'=>strtolower($request->name)])->exists();
-        if($curricullum_exists){
-            return ['message'=>'Curricullum with name '.$request->name.' already exits.','status'=>false];
-        }
-        $curricullum = new Curricullum;
-        $curricullum->name = strtolower($request->name);
-        $curricullum->slug = Str::slug($request->name.' Syllabus','-');
-        $curricullum->isActive = true;
-        $curricullum->save();
-        return new CurricullumResource($curricullum);
-        }catch(Exception $e){
-        return ['message'=>$curricullum->name.' could not be created!.','status'=>true];
-        }
+        $validatedData = $request->validate([
+            'name' => "bail|required|unique:curricullums",
 
+        ]);
+        try {
+
+            $curricullum = new Curricullum;
+            $curricullum->name = $request->name;
+            $curricullum->slug = Str::slug($request->name . ' Syllabus', '-');
+            $curricullum->isActive = isset($request->isActive) ? $request->isActive : true;
+            $curricullum->save();
+            return new CurricullumResource($curricullum);
+        } catch (Exception $e) {
+            return ['message' => $curricullum->name . ' could not be created!.', 'status' => true];
+        }
     }
 
     /**
@@ -78,10 +78,10 @@ class CurricullumController extends Controller
      */
     public function show(Curricullum $curricullum)
     {
-        try{
-        return new CurricullumResource($curricullum);
-        }catch(Exception $e){
-            return ['message'=>'Curricullum with id '.$curricullum->id.' not found'];
+        try {
+            return new CurricullumResource($curricullum);
+        } catch (Exception $e) {
+            return ['message' => 'Curricullum with id ' . $curricullum->id . ' not found'];
         }
     }
 
@@ -93,7 +93,6 @@ class CurricullumController extends Controller
      */
     public function edit(Curricullum $curricullum)
     {
-       
     }
 
     /**
@@ -105,23 +104,22 @@ class CurricullumController extends Controller
      */
     public function update(Request $request, Curricullum $curricullum)
     {
-        try{
-  
-            $curricullum_exists = Curricullum::where(['name'=>strtolower($request->name)])->first();
-            if($curricullum_exists){
-                if($curricullum_exists->id!=$curricullum->id){
-                return ['message'=>'Curricullum with name '.$request->name.' already exits.','status'=>false];
-                }
-            }
+        try {
+
+            $curricullum_exists = Curricullum::where(['name' => strtolower($request->name)])->first();
+            $validatedData = $request->validate([
+                'name' => "bail|unique:curricullums",
+
+            ]);
             // $curricullumUpdate = Curricullum::findOrFail($curricullum->id);
-           
+
             $curricullum->name = strtolower($request->name);
-            $curricullum->slug = Str::slug($request->name.' Syllabus','-');
-            $curricullum->isActive = isset($request->isActive)?$request->isActive:true;
+            $curricullum->slug = Str::slug($request->name . ' Syllabus', '-');
+            $curricullum->isActive = isset($request->isActive) ? $request->isActive : true;
             $curricullum->save();
-           return new CurricullumResource($curricullum);
-        }catch(Exception $e){
-            return ['message'=>$curricullum->name.' could not be updated!.','status'=>false];
+            return new CurricullumResource($curricullum);
+        } catch (Exception $e) {
+            return ['message' => $curricullum->name . ' could not be updated!.', 'status' => false];
         }
     }
 
@@ -133,12 +131,12 @@ class CurricullumController extends Controller
      */
     public function destroy(Curricullum $curricullum)
     {
-        try{
-           
+        try {
+
             $curricullum->delete();
-            return ['message'=>$curricullum->name.' deleted successfully!.','status'=>true];
-        }catch(Exception $e){
-            return ['message'=>$curricullum->name.' could not be deleted!.','status'=>false];
+            return ['message' => $curricullum->name . ' deleted successfully!.', 'status' => true];
+        } catch (Exception $e) {
+            return ['message' => $curricullum->name . ' could not be deleted!.', 'status' => false];
         }
     }
 }

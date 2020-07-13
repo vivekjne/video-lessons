@@ -8,29 +8,13 @@ import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
 import { useHistory, useRouteMatch, Link } from "react-router-dom";
 import { teal } from "@material-ui/core/colors";
+import subjectClient from "../../../api/subjectClient";
 
 const SubjectList = () => {
     const history = useHistory();
     const { path } = useRouteMatch();
 
-    const [data, setData] = useState([
-        {
-            id: 1,
-            name: "Maths",
-            slug: "class-9-maths",
-            isActive: false,
-            created_at: "9-07-2020",
-            updated_at: "9-07-2020"
-        },
-        {
-            id: 2,
-            name: "Chemistry",
-            slug: "class-9-chemistry",
-            isActive: true,
-            created_at: "9-07-2020",
-            updated_at: "9-07-2020"
-        }
-    ]);
+    const [data, setData] = useState([]);
 
     const handleChange = (e, rowData) => {
         console.log(rowData);
@@ -39,6 +23,17 @@ const SubjectList = () => {
         newData[itemIndex].isActive = e.target.checked;
         setData(newData);
     };
+
+    React.useEffect(() => {
+        async function fetchInitialData() {
+            try {
+                const response = await subjectClient.getSubjects();
+                setData(response.data.data);
+            } catch (err) {}
+        }
+
+        fetchInitialData();
+    }, []);
     return (
         <>
             <Heading
@@ -65,6 +60,16 @@ const SubjectList = () => {
                             )
                         },
                         { title: "Slug", field: "slug" },
+                        {
+                            title: "Thumbnail",
+                            field: "thumbnail",
+                            render: rowData => (
+                                <img
+                                    src={`http://localhost:8000/uploads/${rowData.thumbnail}`}
+                                    style={{ width: 50, height: 50 }}
+                                />
+                            )
+                        },
 
                         {
                             title: "Active",
@@ -72,7 +77,7 @@ const SubjectList = () => {
                             render: rowData => (
                                 <Switch
                                     onChange={e => handleChange(e, rowData)}
-                                    checked={rowData.isActive}
+                                    checked={rowData.isActive === 1}
                                     color="secondary"
                                 />
                             )
@@ -94,20 +99,20 @@ const SubjectList = () => {
                         actionsColumnIndex: -1
                     }}
                     actions={[
-                        {
-                            icon: "edit",
-                            tooltip: "Edit Curricullum",
-                            iconProps: {
-                                color: "primary"
-                            },
-                            onClick: (event, rowData) =>
-                                history.push({
-                                    pathname: `${path}/${rowData.id}/edit`,
-                                    state: {
-                                        rowData
-                                    }
-                                })
-                        },
+                        // {
+                        //     icon: "edit",
+                        //     tooltip: "Edit Curricullum",
+                        //     iconProps: {
+                        //         color: "primary"
+                        //     },
+                        //     onClick: (event, rowData) =>
+                        //         history.push({
+                        //             pathname: `${path}/${rowData.id}/edit`,
+                        //             state: {
+                        //                 rowData
+                        //             }
+                        //         })
+                        // },
                         rowData => ({
                             icon: "delete",
                             tooltip: "Delete Curricullum",

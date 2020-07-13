@@ -8,29 +8,26 @@ import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { teal } from "@material-ui/core/colors";
+import moment from "moment";
+import classroomClient from "../../../api/classroomClient";
 
 const ClassroomList = () => {
     const history = useHistory();
     const { path } = useRouteMatch();
 
-    const [data, setData] = useState([
-        {
-            id: 1,
-            name: "CBSE",
-            slug: "cbse-syllabus",
-            isActive: false,
-            created_at: "9-07-2020",
-            updated_at: "9-07-2020"
-        },
-        {
-            id: 2,
-            name: "ICSE",
-            slug: "icse-syllabus",
-            isActive: true,
-            created_at: "9-07-2020",
-            updated_at: "9-07-2020"
+    const [data, setData] = useState([]);
+    async function fetchClassrooms() {
+        try {
+            const response = await classroomClient.getClassrooms();
+            console.log({ response: response.data });
+            setData(response.data.data);
+        } catch (err) {
+            console.log(err.response);
         }
-    ]);
+    }
+    React.useEffect(() => {
+        fetchClassrooms();
+    }, []);
 
     const handleChange = (e, rowData) => {
         console.log(rowData);
@@ -52,9 +49,34 @@ const ClassroomList = () => {
                     columns={[
                         { title: "ID", field: "id" },
 
-                        { title: "Title", field: "name" },
+                        {
+                            title: "Title",
+                            field: "name",
+                            render: rowData => (
+                                <Typography variant="inherit">
+                                    Classroom {rowData.name}
+                                </Typography>
+                            )
+                        },
                         { title: "Slug", field: "slug" },
-
+                        // {
+                        //     title: "Curricullums",
+                        //     field: "curricullums",
+                        //     render: rowData => (
+                        //         <Typography variant="inherit">
+                        //             {rowData.curricullums.map(
+                        //                 (c, index) =>
+                        //                     `${c.name}${
+                        //                         rowData.curricullums.length -
+                        //                             1 !==
+                        //                         index
+                        //                             ? ","
+                        //                             : ""
+                        //                     }`
+                        //             )}
+                        //         </Typography>
+                        //     )
+                        // },
                         {
                             title: "Active",
                             field: "isActive",
@@ -66,8 +88,28 @@ const ClassroomList = () => {
                                 />
                             )
                         },
-                        { title: "Created At", field: "created_at" },
-                        { title: "Updated At", field: "updated_at" }
+                        {
+                            title: "Created At",
+                            field: "created_at",
+                            render: rowData => (
+                                <Typography variant="inherit">
+                                    {moment(rowData.created_at).format(
+                                        "DD-MM-YYYY"
+                                    )}
+                                </Typography>
+                            )
+                        },
+                        {
+                            title: "Updated At",
+                            field: "updated_at",
+                            render: rowData => (
+                                <Typography variant="inherit">
+                                    {moment(rowData.updated_at).format(
+                                        "DD-MM-YYYY"
+                                    )}
+                                </Typography>
+                            )
+                        }
                     ]}
                     data={data}
                     title="Classroom List"

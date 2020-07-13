@@ -68,13 +68,13 @@ const useStyles = makeStyles(theme => ({
 const steps = ["Basic", "Media", "Finish"];
 const subjectOptions = ["Physics", "Chemistry", "Maths"];
 
-function BasicForm(step) {
+function BasicForm({ formik, classrooms, curricullums }) {
     const classes = useStyles();
     const [text, setText] = useState("");
     const [title, setTitle] = useState("");
 
-    const [curricullums, setCurricullums] = useState("");
-    const [classrooms, setClassrooms] = useState("");
+    // const [curricullums, setCurricullums] = useState("");
+    // const [classrooms, setClassrooms] = useState("");
 
     const [selectedClassrooms, setSelectedClassrooms] = useState([]);
 
@@ -83,40 +83,6 @@ function BasicForm(step) {
         setText(value);
     };
 
-    const handleSelectChange = e => {
-        const { target } = e;
-        let newItems;
-
-        if (target.name == "curricullums") {
-            setCurricullums(target.value);
-        } else if (target.name == "classrooms") {
-            setClassrooms(target.value);
-        }
-        // const itemIndex = newItems.findIndex(item => item === target.value);
-        // itemIndex !== -1
-        //     ? newItems.splice(itemIndex, 1)
-        //     : newItems.push(target.value);
-        // if (target.name == "curricullums") {
-        //     setSelectedCurricullums(newItems);
-        // } else if (target.name == "classrooms") {
-        //     setSelectedClassrooms(newItems);
-        // }
-    };
-
-    const onAddClassroomCurricullum = () => {
-        console.log("add");
-        let newClassrooms = [...selectedClassrooms];
-        if (curricullums && classrooms) {
-            newClassrooms.push(`${curricullums} - ${classrooms}`);
-        }
-        setSelectedClassrooms(newClassrooms);
-    };
-
-    const onDelete = index => {
-        let newSelectedClassrooms = [...selectedClassrooms];
-        newSelectedClassrooms.splice(index, 1);
-        setSelectedClassrooms(newSelectedClassrooms);
-    };
     return (
         <Grid container direction="column">
             <Grid className={classes.inputSpacer} item>
@@ -124,17 +90,24 @@ function BasicForm(step) {
                     id="combo-box-demo"
                     options={subjectOptions}
                     getOptionLabel={option => option}
-                    onChange={(e, newValue) => setTitle(newValue)}
-                    value={title}
+                    onChange={(e, newValue) => {
+                        console.log(newValue);
+                        formik.setFieldValue("name", newValue);
+                    }}
                     fullWidth
                     freeSolo
                     renderInput={params => (
                         <TextField
                             fullWidth
+                            {...formik.getFieldProps("name")}
                             {...params}
                             label="Subject Title"
                             variant="standard"
-                            helperText="*Choose from a list of available subjects or type to add a new one."
+                            helperText={
+                                (formik.touched.name && formik.errors.name) ||
+                                "*Choose from a list of available subjects or type to add a new one."
+                            }
+                            error={formik.touched.name && formik.errors.name}
                         />
                     )}
                 />
@@ -146,6 +119,16 @@ function BasicForm(step) {
                     fullWidth
                     label="Subject display name"
                     variant="standard"
+                    {...formik.getFieldProps("display_name")}
+                    helperText={
+                        (formik.touched.display_name &&
+                            formik.errors.display_name) ||
+                        "*Choose from a list of available subjects or type to add a new one."
+                    }
+                    error={
+                        formik.touched.display_name &&
+                        formik.errors.display_name
+                    }
                 />
             </Grid>
 
@@ -156,6 +139,15 @@ function BasicForm(step) {
                     variant="filled"
                     multiline
                     rows={3}
+                    {...formik.getFieldProps("short_description")}
+                    helperText={
+                        formik.touched.short_description &&
+                        formik.errors.short_description
+                    }
+                    error={
+                        formik.touched.short_description &&
+                        formik.errors.short_description
+                    }
                 />
             </Grid>
 
@@ -163,8 +155,20 @@ function BasicForm(step) {
                 <div style={{ marginBottom: 32 }}>
                     <ReactQuill
                         style={{ height: 150 }}
-                        value={text}
-                        onChange={handleChange}
+                        // value={text}
+                        // onChange={handleChange}
+                        {...formik.getFieldProps("description")}
+                        onChange={text =>
+                            formik.setFieldValue("description", text)
+                        }
+                        helperText={
+                            formik.touched.description &&
+                            formik.errors.description
+                        }
+                        error={
+                            formik.touched.description &&
+                            formik.errors.description
+                        }
                     />
                 </div>
             </Grid>
@@ -172,7 +176,13 @@ function BasicForm(step) {
                 <Grid container alignItems="center" spacing={3}>
                     <Grid item xs={5}>
                         <FormControl fullWidth className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-label">
+                            <InputLabel
+                                error={
+                                    formik.touched.curricullum_id &&
+                                    formik.errors.curricullum_id
+                                }
+                                id="demo-simple-select-label"
+                            >
                                 Curricullum
                             </InputLabel>
                             <Select
@@ -180,18 +190,45 @@ function BasicForm(step) {
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 name="curricullums"
-                                onChange={handleSelectChange}
+                                // onChange={handleSelectChange}
+                                {...formik.getFieldProps("curricullum_id")}
+                                helperText={
+                                    formik.touched.curricullum_id &&
+                                    formik.errors.curricullum_id
+                                }
+                                error={
+                                    formik.touched.curricullum_id &&
+                                    formik.errors.curricullum_id
+                                }
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {curricullums &&
+                                    curricullums.map(c => (
+                                        <MenuItem key={c.id} value={c.id}>
+                                            {c.name}
+                                        </MenuItem>
+                                    ))}
                             </Select>
+                            <FormHelperText
+                                error={
+                                    formik.touched.curricullum_id &&
+                                    formik.errors.curricullum_id
+                                }
+                            >
+                                {formik.touched.curricullum_id &&
+                                    formik.errors.curricullum_id}
+                            </FormHelperText>
                         </FormControl>
                     </Grid>
 
                     <Grid item xs={5}>
                         <FormControl fullWidth className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-label">
+                            <InputLabel
+                                error={
+                                    formik.touched.classroom_id &&
+                                    formik.errors.classroom_id
+                                }
+                                id="demo-simple-select-label"
+                            >
                                 Classroom
                             </InputLabel>
                             <Select
@@ -199,16 +236,37 @@ function BasicForm(step) {
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 name="classrooms"
-                                onChange={handleSelectChange}
+                                // onChange={handleSelectChange}
+                                {...formik.getFieldProps("classroom_id")}
+                                helperText={
+                                    formik.touched.description &&
+                                    formik.errors.classroom_id
+                                }
+                                error={
+                                    formik.touched.description &&
+                                    formik.errors.classroom_id
+                                }
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {classrooms &&
+                                    classrooms.map(c => (
+                                        <MenuItem key={c.id} value={c.id}>
+                                            {c.name}
+                                        </MenuItem>
+                                    ))}
                             </Select>
+                            <FormHelperText
+                                error={
+                                    formik.touched.classroom_id &&
+                                    formik.errors.classroom_id
+                                }
+                            >
+                                {formik.touched.classroom_id &&
+                                    formik.errors.classroom_id}
+                            </FormHelperText>
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={2}>
+                    {/* <Grid item xs={2}>
                         <Button
                             onClick={onAddClassroomCurricullum}
                             color="primary"
@@ -216,7 +274,7 @@ function BasicForm(step) {
                         >
                             <Typography>Add</Typography>
                         </Button>
-                    </Grid>
+                    </Grid> */}
                     <Grid item>
                         <div style={{ display: "flex", marginRight: 8 }}>
                             {selectedClassrooms.map((classroom, index) => (

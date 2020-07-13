@@ -68,22 +68,24 @@ const useStyles = makeStyles(theme => ({
 const steps = ["Basic", "Media", "Finish"];
 // const subjectOptions = ["Physics", "Chemistry", "Maths"];
 
-function SeoForm(step) {
+function SeoForm({ formik }) {
     const classes = useStyles();
     const [text, setText] = useState("");
     const [chips, setChips] = useState([]);
     const thumbnailRef = useRef();
 
-    function handleAddChip(chip) {
+    function handleAddChip(chip, formik) {
         const newChips = [...chips];
         newChips.push(chip);
         setChips(newChips);
+        formik.setFieldValue("meta_tags", newChips);
     }
 
-    function handleDeleteChip(chip, index) {
+    function handleDeleteChip(chip, index, formik) {
         const newChips = [...chips];
         newChips.splice(index, 1);
         setChips(newChips);
+        formik.setFieldValue("meta_tags", newChips);
     }
     return (
         <Grid container direction="column">
@@ -92,9 +94,16 @@ function SeoForm(step) {
                     fullWidth
                     label="meta tags"
                     value={chips}
-                    onAdd={chip => handleAddChip(chip)}
-                    onDelete={(chip, index) => handleDeleteChip(chip, index)}
-                    helperText="Write a keyword and press enter"
+                    onAdd={chip => handleAddChip(chip, formik)}
+                    onDelete={(chip, index) =>
+                        handleDeleteChip(chip, index, formik)
+                    }
+                    // {...formik.getFieldProps("meta_tags")}
+                    helperText={
+                        (formik.touched.meta_tags && formik.errors.meta_tags) ||
+                        "Write a keyword and press enter"
+                    }
+                    error={formik.touched.meta_tags && formik.errors.meta_tags}
                 />
             </Grid>
 
@@ -105,6 +114,16 @@ function SeoForm(step) {
                     variant="filled"
                     multiline
                     rows={3}
+                    {...formik.getFieldProps("meta_description")}
+                    helperText={
+                        (formik.touched.meta_description &&
+                            formik.errors.meta_description) ||
+                        "Write a keyword and press enter"
+                    }
+                    error={
+                        formik.touched.meta_description &&
+                        formik.errors.meta_description
+                    }
                 />
             </Grid>
         </Grid>
