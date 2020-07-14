@@ -8,7 +8,14 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-import { Container, Grid, TextField } from "@material-ui/core";
+import {
+    Container,
+    Grid,
+    TextField,
+    CircularProgress
+} from "@material-ui/core";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 const styles = theme => ({
     root: {
@@ -54,58 +61,118 @@ const DialogActions = withStyles(theme => ({
     }
 }))(MuiDialogActions);
 
-export default function CustomizedDialogs({ open, handleClose }) {
+export default function CustomizedDialogs({
+    open,
+    handleClose,
+    subject_id,
+    onSubmitAction
+}) {
+    const [isSubmitted, setIsSubmitted] = React.useState(false);
+
     return (
         <div>
-            <Dialog
-                maxWidth="xs"
-                fullWidth
-                onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
-                open={open}
+            <Formik
+                initialValues={{ name: "", summary: "", subject_id }}
+                validationSchema={Yup.object({
+                    name: Yup.string()
+                        .max(200)
+                        .required(),
+                    summary: Yup.string().max(255)
+                })}
+                onSubmit={async (values, formik) => {
+                    console.log({ values });
+                    setIsSubmitted(true);
+                    const isSuccess = await onSubmitAction(values);
+                    if (isSuccess) {
+                        formik.resetForm();
+                    }
+                    setIsSubmitted(false);
+                }}
             >
-                <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    Add New Section
-                </DialogTitle>
-                <DialogContent dividers>
-                    <Grid
-                        container
-                        direction="column"
-                        style={{ width: "100%" }}
-                    >
-                        <Grid item style={{ marginBottom: 16 }}>
-                            <TextField
-                                fullWidth
-                                variant="standard"
-                                color="primary"
-                                label="Section title"
-                                helperText="provide a title for the section"
-                            />
-                        </Grid>
+                {formik => (
+                    <form onSubmit={formik.handleSubmit}>
+                        <Dialog
+                            maxWidth="xs"
+                            fullWidth
+                            onClose={handleClose}
+                            aria-labelledby="customized-dialog-title"
+                            open={open}
+                        >
+                            <DialogTitle
+                                id="customized-dialog-title"
+                                onClose={handleClose}
+                            >
+                                Add New Section
+                            </DialogTitle>
+                            <DialogContent dividers>
+                                <Grid
+                                    container
+                                    direction="column"
+                                    style={{ width: "100%" }}
+                                >
+                                    <Grid item style={{ marginBottom: 16 }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="standard"
+                                            color="primary"
+                                            label="Section title"
+                                            {...formik.getFieldProps("name")}
+                                            helperText={
+                                                (formik.touched.name &&
+                                                    formik.errors.name) ||
+                                                "provide a title for the section"
+                                            }
+                                            error={
+                                                formik.touched.name &&
+                                                formik.errors.name
+                                            }
+                                        />
+                                    </Grid>
 
-                        <Grid item style={{ marginBottom: 16 }}>
-                            <TextField
-                                multiline
-                                rows={2}
-                                fullWidth
-                                variant="filled"
-                                color="primary"
-                                label="Section description"
-                                helperText="provide a description"
-                            />
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        disableElevation
-                        variant="contained"
-                        color="primary"
-                    >
-                        <Typography>Add Section</Typography>
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                                    <Grid item style={{ marginBottom: 16 }}>
+                                        <TextField
+                                            multiline
+                                            rows={2}
+                                            fullWidth
+                                            variant="filled"
+                                            color="primary"
+                                            label="Section summary"
+                                            {...formik.getFieldProps("summary")}
+                                            helperText={
+                                                (formik.touched.summary &&
+                                                    formik.errors.summary) ||
+                                                "provide a summary"
+                                            }
+                                            error={
+                                                formik.touched.summary &&
+                                                formik.errors.summary
+                                            }
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    disabled={isSubmitted}
+                                    type="submit"
+                                    disableElevation
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={formik.handleSubmit}
+                                >
+                                    <Typography>Add Section</Typography>
+                                    {isSubmitted && (
+                                        <CircularProgress
+                                            color="primary"
+                                            size={12}
+                                        />
+                                    )}
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </form>
+                )}
+            </Formik>
         </div>
     );
 }

@@ -5,8 +5,12 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Classroom as ClassroomResource;
 use App\Http\Resources\Curricullum as CurricullumResource;
+use App\Http\Resources\SectionCollection as SectionResource;
+
 use App\Classroom;
 use App\Curricullum;
+use App\Section;
+
 
 class Subject extends JsonResource
 {
@@ -33,6 +37,8 @@ class Subject extends JsonResource
             "description" => $this->description,
             'classroom' => new ClassroomResource(Classroom::find($this->classroom_id)->first()),
             'curricullum' => new CurricullumResource(Curricullum::find($this->curricullum_id)->first()),
+            'sections' => new SectionResource(Section::where('subject_id', $this->id)->orderBy('order')->with('lessons')->get()),
+
 
             // 'curricullum' => new CurricullumResource($this->curricullum_id),
             "preview_url" => $this->preview_url,

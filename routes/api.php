@@ -18,13 +18,13 @@ use App\User;
 
 Route::post('/login', 'AuthController@login');
 Route::get('/test', function (Request $request) {
-    return response()->json(['message'=>'hello']);
+    return response()->json(['message' => 'hello']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-  Route::get('/user', function (Request $request) {
-    return $request->user();
-});
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
 
 
@@ -32,18 +32,18 @@ Route::post('/sanctum/token', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
         'password' => 'required',
-       
+
     ]);
 
     $user = User::where('email', $request->email)->first();
 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
+    if (!$user || !Hash::check($request->password, $user->password)) {
         throw ValidationException::withMessages([
             'email' => ['The provided credentials are incorrect.'],
         ]);
     }
 
-    return response()->json(['token'=>$user->createToken('authToken')->plainTextToken]);
+    return response()->json(['token' => $user->createToken('authToken')->plainTextToken]);
 });
 Route::get('categories/products', 'CategoryController@getCategoryWithProjects');
 
@@ -54,8 +54,9 @@ Route::resource('curricullums', 'CurricullumController');
 
 Route::resource('classrooms', 'ClassroomController');
 Route::get('syllabus/classrooms/subjects', 'ClassroomSyllabusController@index');
-Route::get('syllabus/classrooms/students','CurricullumClassroomController@index');
+Route::get('syllabus/classrooms/students', 'CurricullumClassroomController@index');
 Route::resource('subjects', 'SubjectController');
+Route::resource('sections', 'SectionController');
+
 Route::resource('students', 'StudentController');
-
-
+Route::resource('lessons', 'LessonController');

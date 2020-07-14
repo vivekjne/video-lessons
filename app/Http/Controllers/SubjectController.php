@@ -47,7 +47,7 @@ class SubjectController extends Controller
 
         $subject = new Subject;
         $subject->name = $request->name;
-        $subject->slug = Str::slug($request->name . ' Syllabus', '-');
+        $subject->slug = Str::slug($request->name, '-');
         $subject->display_name = $request->display_name;
         $subject->classroom_id = $request->classroom_id;
         $subject->curricullum_id = $request->curricullum_id;
@@ -60,11 +60,12 @@ class SubjectController extends Controller
             $subject->description = $request->description;
         }
 
+        if ($request->has('thumbnail')) {
+            $fileName = time() . '.' . $request->thumbnail->extension();
 
-        $fileName = time() . '.' . $request->thumbnail->extension();
-
-        $request->thumbnail->move(public_path('uploads'), $fileName);
-        $subject->thumbnail = $fileName;
+            $request->thumbnail->move(public_path('uploads'), $fileName);
+            $subject->thumbnail = $fileName;
+        }
 
         if ($request->has('isActive')) {
             $subject->isActive = $request->isActive;

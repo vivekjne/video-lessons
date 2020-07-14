@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function CustomizedTimeline({ number }) {
+export default function CustomizedTimeline({ number, item }) {
     const classes = useStyles();
 
     return (
@@ -60,13 +60,16 @@ export default function CustomizedTimeline({ number }) {
                 position: "relative",
                 borderLeft: "1px solid #ccc",
                 // height: 1000,
-                marginLeft: 16
+                width: "100%",
+                marginLeft: 16,
+                paddingRight: 16
             }}
         >
             <div
                 style={{
                     display: "flex",
                     // alignItems: "center",
+                    width: "100%",
                     padding: "32px 0",
                     position: "relative"
                 }}
@@ -88,9 +91,9 @@ export default function CustomizedTimeline({ number }) {
                 >
                     <Typography variant="h4">{number}</Typography>
                 </div>
-                <div style={{ marginLeft: 40, marginRight: 16 }}>
+                <div style={{ marginLeft: 40, marginRight: 16, width: "100%" }}>
                     <Typography variant="h5" style={{ marginBottom: 16 }}>
-                        Getting Started With Physics
+                        {item.name}
                     </Typography>
 
                     <Typography
@@ -98,11 +101,7 @@ export default function CustomizedTimeline({ number }) {
                         variant="body1"
                         color="textSecondary"
                     >
-                        The following code uses object URLs, which is much more
-                        efficient than data URL for viewing large images (A data
-                        URL is a huge string containing all of the file data,
-                        whereas an object URL, is just a short string
-                        referencing the file data in-memory)
+                        {item.summary}
                     </Typography>
 
                     <Accordion elevation={4}>
@@ -112,33 +111,49 @@ export default function CustomizedTimeline({ number }) {
                             id="panel1a-header"
                         >
                             <Typography className={classes.heading}>
-                                Accordion 1
+                                {item.lessons.length}{" "}
+                                {item.lessons.length === 1
+                                    ? "lesson"
+                                    : "lessons"}
                             </Typography>
                         </AccordionSummary>
                         <AccordionDetails style={{ padding: 0 }}>
                             <List className={classes.root}>
-                                {[1, 2, 3, 4].map((d, index) => (
-                                    <>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <PlayCircleFilledOutlined />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                // id="switch-list-label-wifi"
-                                                primary="Introduction"
-                                            />
-                                            <ListItemSecondaryAction>
-                                                <Typography
-                                                    variant="body2"
-                                                    color="textSecondary"
-                                                >
-                                                    54 min
-                                                </Typography>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                        {index !== 3 && <Divider />}
-                                    </>
-                                ))}
+                                {item.lessons && item.lessons.length === 0 && (
+                                    <Typography
+                                        style={{ paddingLeft: 16 }}
+                                        variant="body1"
+                                        color="textSecondary"
+                                    >
+                                        No Lessons yet!
+                                    </Typography>
+                                )}
+                                {item.lessons &&
+                                    item.lessons.map((lesson, index) => (
+                                        <>
+                                            <ListItem>
+                                                <ListItemIcon>
+                                                    <PlayCircleFilledOutlined />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    // id="switch-list-label-wifi"
+                                                    primary={lesson.name}
+                                                />
+                                                <ListItemSecondaryAction>
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="textSecondary"
+                                                    >
+                                                        {lesson.duration}
+                                                    </Typography>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                            {index !==
+                                                item.lessons.length - 1 && (
+                                                <Divider />
+                                            )}
+                                        </>
+                                    ))}
                             </List>
                         </AccordionDetails>
                     </Accordion>

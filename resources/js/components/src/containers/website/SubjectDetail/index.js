@@ -11,10 +11,14 @@ import OndemandVideoOutlined from "@material-ui/icons/OndemandVideoOutlined";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import { indigo, grey } from "@material-ui/core/colors";
+import { indigo, grey, purple } from "@material-ui/core/colors";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import TimelineSections from "./TimeLineSections";
+import { useParams } from "react-router-dom";
+import subjectClient from "../../../api/subjectClient";
+import { CircularProgress } from "@material-ui/core";
+import TimelineNav from "./TimelineNav";
 
 const useStyles = makeStyles(theme => ({
     bannerContainer: {
@@ -31,8 +35,25 @@ export default function SubjectDetail() {
     const classes = useStyles();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.down("xs"));
+    const { id } = useParams();
+    const [loading, setLoading] = React.useState(true);
+    const [data, setData] = React.useState(null);
 
-    return (
+    React.useEffect(() => {
+        async function fetchSubject() {
+            try {
+                const response = await subjectClient.getSubject(id);
+                setData(response.data.data);
+                console.log({ response });
+            } catch (err) {
+                console.log(err);
+            }
+            setLoading(false);
+        }
+
+        fetchSubject();
+    }, []);
+    return !loading ? (
         <>
             <div className={classes.bannerContainer}>
                 <Container maxWidth="md">
@@ -45,7 +66,7 @@ export default function SubjectDetail() {
                     >
                         <Grid item>
                             <Typography variant={matches ? "h2" : "h1"}>
-                                Physics
+                                {data.name}
                             </Typography>
                         </Grid>
 
@@ -55,10 +76,7 @@ export default function SubjectDetail() {
                                 variant={matches ? "h6" : "h5"}
                                 style={{ opacity: "0.6" }}
                             >
-                                Easily the most notable feature in this release
-                                is the addition of some hooks (for React 16.8
-                                users, ofc). We are excited about the ability
-                                that hooks give us to.
+                                {data.short_description}
                             </Typography>
                         </Grid>
 
@@ -147,15 +165,31 @@ export default function SubjectDetail() {
             <Container maxWidth="lg">
                 <Grid container justify="flex-start">
                     <Grid item xs={12} md={8}>
-                        {[1, 2, 3, 4, 5].map((d, index) => (
-                            <TimelineSections number={index + 1} />
+                        {data.sections.map((section, index) => (
+                            <TimelineSections
+                                key={section.id}
+                                item={section}
+                                number={index + 1}
+                            />
                         ))}
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        {/* <TimelineSections /> */}
+                        {data.sections.map((section, index) => (
+                            <TimelineNav key={section.id} item={section} />
+                        ))}
                     </Grid>
                 </Grid>
             </Container>
         </>
+    ) : (
+        <div
+            style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+            }}
+        >
+            <CircularProgress style={{ color: purple[900] }} />
+        </div>
     );
 }

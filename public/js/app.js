@@ -84018,7 +84018,7 @@ var Admin = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(func
   return Promise.all(/*! import() */[__webpack_require__.e(8), __webpack_require__.e(11), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, /*! ./containers/Admin */ "./resources/js/components/src/containers/Admin/index.js"));
 });
 var StudentHome = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(2), __webpack_require__.e(8), __webpack_require__.e(10), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ./containers/website/StudentHome */ "./resources/js/components/src/containers/website/StudentHome/index.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(8), __webpack_require__.e(10), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ./containers/website/StudentHome */ "./resources/js/components/src/containers/website/StudentHome/index.js"));
 });
 
 var App = /*#__PURE__*/function (_React$Component) {

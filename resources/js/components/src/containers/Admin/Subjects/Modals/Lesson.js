@@ -15,7 +15,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
+import { Formik } from "formik";
+import * as Yup from "yup";
 const styles = theme => ({
     root: {
         margin: 0,
@@ -60,100 +61,186 @@ const DialogActions = withStyles(theme => ({
     }
 }))(MuiDialogActions);
 
-export default function LessonModal({ open, handleClose }) {
-    const [age, setAge] = React.useState("");
+export default function LessonModal({
+    open,
+    handleClose,
+    subject_id,
+    sections,
+    onSubmitAction
+}) {
+    const [isSubmitted, setIsSubmitted] = React.useState(false);
 
-    const handleChange = event => {
-        setAge(event.target.value);
-    };
     return (
         <div>
-            <Dialog
-                maxWidth="xs"
-                fullWidth
-                onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
-                open={open}
+            <Formik
+                initialValues={{
+                    name: "",
+                    summary: "",
+                    subject_id,
+                    section_id: null,
+                    video_url: ""
+                }}
+                validationSchema={Yup.object({
+                    name: Yup.string()
+                        .max(200)
+                        .required(),
+                    summary: Yup.string().max(255),
+                    section_id: Yup.number(
+                        "Please select a section"
+                    ).required(),
+                    video_url: Yup.string()
+                        .url()
+                        .required()
+                })}
+                onSubmit={async (values, formik) => {
+                    console.log({ values });
+                    setIsSubmitted(true);
+                    const isSuccess = await onSubmitAction(values);
+                    if (isSuccess) {
+                        formik.resetForm();
+                    }
+                    setIsSubmitted(false);
+                }}
             >
-                <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-                    Add New Lesson
-                </DialogTitle>
-                <DialogContent dividers>
-                    <Grid
-                        container
-                        direction="column"
-                        style={{ width: "100%" }}
-                    >
-                        <Grid item style={{ marginBottom: 16 }}>
-                            <TextField
-                                fullWidth
-                                variant="standard"
-                                color="primary"
-                                label="Lesson title"
-                                helperText="provide a title for the lesson"
-                            />
-                        </Grid>
-
-                        <Grid item style={{ marginBottom: 16 }}>
-                            <TextField
-                                multiline
-                                rows={2}
-                                fullWidth
-                                variant="filled"
-                                color="primary"
-                                label="Lesson summary"
-                                helperText="provide a summary of the lesson"
-                            />
-                        </Grid>
-                        <Grid item>
-                            <FormControl fullWidth variant="standard">
-                                <InputLabel id="demo-simple-select-outlined-label">
-                                    Select Section
-                                </InputLabel>
-                                <Select
-                                    fullWidth
-                                    labelId="demo-simple-select-outlined-label"
-                                    id="demo-simple-select-outlined"
-                                    value={age}
-                                    onChange={handleChange}
-                                    label="Age"
+                {formik => (
+                    <form onSubmit={formik.handleSubmit}>
+                        <Dialog
+                            maxWidth="xs"
+                            fullWidth
+                            onClose={handleClose}
+                            aria-labelledby="customized-dialog-title"
+                            open={open}
+                        >
+                            <DialogTitle
+                                id="customized-dialog-title"
+                                onClose={handleClose}
+                            >
+                                Add New Lesson
+                            </DialogTitle>
+                            <DialogContent dividers>
+                                <Grid
+                                    container
+                                    direction="column"
+                                    style={{ width: "100%" }}
                                 >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
+                                    <Grid item style={{ marginBottom: 16 }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="standard"
+                                            color="primary"
+                                            label="Lesson title"
+                                            {...formik.getFieldProps("name")}
+                                            helperText={
+                                                (formik.touched.name &&
+                                                    formik.errors.name) ||
+                                                "provide a title for the lesson"
+                                            }
+                                            error={
+                                                formik.touched.name &&
+                                                formik.errors.name
+                                            }
+                                        />
+                                    </Grid>
 
-                                <FormHelperText>
-                                    Please select a section to attach the
-                                    lesson.
-                                </FormHelperText>
-                            </FormControl>
-                        </Grid>
+                                    <Grid item style={{ marginBottom: 16 }}>
+                                        <TextField
+                                            multiline
+                                            rows={2}
+                                            fullWidth
+                                            variant="filled"
+                                            color="primary"
+                                            label="Lesson summary"
+                                            {...formik.getFieldProps("summary")}
+                                            helperText={
+                                                (formik.touched.summary &&
+                                                    formik.errors.summary) ||
+                                                "provide a summary of the lesson"
+                                            }
+                                            error={
+                                                formik.touched.summary &&
+                                                formik.errors.summary
+                                            }
+                                        />
+                                    </Grid>
+                                    <Grid
+                                        item
+                                        item
+                                        style={{ marginBottom: 16 }}
+                                    >
+                                        <FormControl
+                                            fullWidth
+                                            variant="standard"
+                                        >
+                                            <InputLabel id="demo-simple-select-outlined-label">
+                                                Select Section
+                                            </InputLabel>
+                                            <Select
+                                                fullWidth
+                                                labelId="demo-simple-select-outlined-label"
+                                                id="demo-simple-select-outlined"
+                                                {...formik.getFieldProps(
+                                                    "section_id"
+                                                )}
+                                                error={
+                                                    formik.touched.section_id &&
+                                                    formik.errors.section_id
+                                                }
+                                                label="Age"
+                                            >
+                                                {sections.map(section => (
+                                                    <MenuItem
+                                                        value={section.id}
+                                                    >
+                                                        {section.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
 
-                        <Grid item style={{ marginBottom: 16 }}>
-                            <TextField
-                                fullWidth
-                                variant="filled"
-                                color="primary"
-                                label="Video URL"
-                                helperText="Provide the video url from vimeo,youtube etc..."
-                            />
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        disableElevation
-                        variant="contained"
-                        color="primary"
-                    >
-                        <Typography>Add Lesson</Typography>
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                                            <FormHelperText>
+                                                {(formik.touched.section_id &&
+                                                    formik.errors.section_id) ||
+                                                    "Please select a section to attach the lesson."}
+                                            </FormHelperText>
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item style={{ marginBottom: 16 }}>
+                                        <TextField
+                                            fullWidth
+                                            variant="filled"
+                                            color="primary"
+                                            label="Video URL"
+                                            {...formik.getFieldProps(
+                                                "video_url"
+                                            )}
+                                            helperText={
+                                                (formik.touched.video_url &&
+                                                    formik.errors.video_url) ||
+                                                "Provide the video url from vimeo,youtube etc..."
+                                            }
+                                            error={
+                                                formik.touched.video_url &&
+                                                formik.errors.video_url
+                                            }
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button
+                                    type="submit"
+                                    onClick={formik.handleSubmit}
+                                    disableElevation
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    <Typography>Add Lesson</Typography>
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </form>
+                )}
+            </Formik>
         </div>
     );
 }

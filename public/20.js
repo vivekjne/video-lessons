@@ -584,7 +584,7 @@ var Classroom = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(
   return __webpack_require__.e(/*! import() */ 23).then(__webpack_require__.bind(null, /*! ./Classroom */ "./resources/js/components/src/containers/Admin/Classroom/index.js"));
 });
 var Subject = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(2), __webpack_require__.e(6), __webpack_require__.e(9), __webpack_require__.e(3), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! ./Subjects */ "./resources/js/components/src/containers/Admin/Subjects/index.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(6), __webpack_require__.e(9), __webpack_require__.e(31), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! ./Subjects */ "./resources/js/components/src/containers/Admin/Subjects/index.js"));
 });
 var drawerWidth = 240;
 var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["makeStyles"])(function (theme) {
