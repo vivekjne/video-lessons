@@ -32,6 +32,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -51,7 +53,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function CustomizedTimeline({ number, item }) {
+export default function CustomizedTimeline({ number, item, data }) {
     const classes = useStyles();
 
     return (
@@ -133,7 +135,12 @@ export default function CustomizedTimeline({ number, item }) {
                                         <>
                                             <ListItem>
                                                 <ListItemIcon>
-                                                    <PlayCircleFilledOutlined />
+                                                    <Button
+                                                        component={Link}
+                                                        to={`/subject/${data.slug}/${data.id}/lesson/${lesson.id}`}
+                                                    >
+                                                        <PlayCircleFilledOutlined />
+                                                    </Button>
                                                 </ListItemIcon>
                                                 <ListItemText
                                                     // id="switch-list-label-wifi"

@@ -25,6 +25,8 @@ import { BounceLoader } from "react-spinners";
 import Axios from "axios";
 import { Route, Switch } from "react-router-dom";
 import SubjectDetail from "../SubjectDetail";
+import VideoLesson from "../VideoLesson";
+
 const useStyles = makeStyles(theme => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
@@ -91,8 +93,8 @@ export default function StudentHome() {
                         </Backdrop>
                     </Container>
                 </Route>
-                <Route path="/subject/:slug/:id/lesson/:slug/:id">
-                    lessons
+                <Route path="/subject/:slug/:subjectId/lesson/:lessonId">
+                    <VideoLesson />
                 </Route>
 
                 <Route path="/subject/:slug/:id">

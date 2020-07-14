@@ -15,13 +15,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var CurricullumList = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(5), __webpack_require__.e(6), __webpack_require__.e(30), __webpack_require__.e(2), __webpack_require__.e(34)]).then(__webpack_require__.bind(null, /*! ./List */ "./resources/js/components/src/containers/Admin/Curricullum/List.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(6), __webpack_require__.e(8), __webpack_require__.e(22)]).then(__webpack_require__.bind(null, /*! ./List */ "./resources/js/components/src/containers/Admin/Curricullum/List.js"));
 });
 var CurricullumAdd = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(3), __webpack_require__.e(4), __webpack_require__.e(31), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ./Add */ "./resources/js/components/src/containers/Admin/Curricullum/Add.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(2), __webpack_require__.e(5), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, /*! ./Add */ "./resources/js/components/src/containers/Admin/Curricullum/Add.js"));
 });
 var CurricullumEdit = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(32)]).then(__webpack_require__.bind(null, /*! ./Edit */ "./resources/js/components/src/containers/Admin/Curricullum/Edit.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ./Edit */ "./resources/js/components/src/containers/Admin/Curricullum/Edit.js"));
 });
 
 var Curricullum = function Curricullum() {

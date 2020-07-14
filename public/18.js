@@ -1,248 +1,24 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[18],{
 
-/***/ "./node_modules/@material-ui/icons/Add.js":
-/*!************************************************!*\
-  !*** ./node_modules/@material-ui/icons/Add.js ***!
-  \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
-
-var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
-  d: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
-}), 'Add');
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "./resources/js/components/src/api/apiClient.js":
-/*!******************************************************!*\
-  !*** ./resources/js/components/src/api/apiClient.js ***!
-  \******************************************************/
-/*! exports provided: ApiClient, default */
+/***/ "./resources/js/components/src/api/classroomClient.js":
+/*!************************************************************!*\
+  !*** ./resources/js/components/src/api/classroomClient.js ***!
+  \************************************************************/
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ApiClient", function() { return ApiClient; });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var connected_react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! connected-react-router */ "./node_modules/connected-react-router/esm/index.js");
-/* harmony import */ var _index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../index.js */ "./resources/js/components/src/index.js");
-/* harmony import */ var _redux_configureStore__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../redux/configureStore */ "./resources/js/components/src/redux/configureStore.js");
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/* harmony import */ var _apiClient__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiClient */ "./resources/js/components/src/api/apiClient.js");
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-
-
-
-var getClient = function getClient(url) {
-  var options = {
-    baseURL: "/api"
-  };
-  var client = axios__WEBPACK_IMPORTED_MODULE_0___default.a.create(options); // Add a request interceptor
-
-  client.interceptors.request.use(function (requestConfig) {
-    var token = localStorage.getItem("token");
-
-    if (token) {
-      requestConfig.headers.Authorization = "Bearer ".concat(token);
-    }
-
-    return requestConfig;
-  }, function (requestError) {
-    return Promise.reject(requestError);
-  }); // Add a response interceptor
-
-  client.interceptors.response.use(function (response) {
-    if (response.data.status === 401) {
-      //if 401 - unauthorised comes redirect to login page.
-      if (_redux_configureStore__WEBPACK_IMPORTED_MODULE_3__["history"].location.pathname !== "/login") {
-        localStorage.removeItem("token");
-        _index_js__WEBPACK_IMPORTED_MODULE_2__["store"].dispatch(Object(connected_react_router__WEBPACK_IMPORTED_MODULE_1__["push"])("/login", {
-          state: _redux_configureStore__WEBPACK_IMPORTED_MODULE_3__["history"].location.pathname
-        }));
-      }
-    }
-
-    return Promise.resolve(response);
-  }, function (error) {
-    return Promise.reject(error);
-  });
-  return client;
-};
-
-var ApiClient = /*#__PURE__*/function () {
-  function ApiClient() {
-    var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-    _classCallCheck(this, ApiClient);
-
-    this.client = getClient(url);
-  }
-
-  _createClass(ApiClient, [{
-    key: "get",
-    value: function get(url) {
-      var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      return this.client.get(url, conf).then(function (response) {
-        return Promise.resolve(response);
-      })["catch"](function (error) {
-        return Promise.reject(error);
-      });
-    }
-  }, {
-    key: "delete",
-    value: function _delete(url) {
-      var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      return this.client["delete"](url, conf).then(function (response) {
-        return Promise.resolve(response);
-      })["catch"](function (error) {
-        return Promise.reject(error);
-      });
-    }
-  }, {
-    key: "head",
-    value: function head(url) {
-      var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      return this.client.head(url, conf).then(function (response) {
-        return Promise.resolve(response);
-      })["catch"](function (error) {
-        return Promise.reject(error);
-      });
-    }
-  }, {
-    key: "options",
-    value: function options(url) {
-      var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      return this.client.options(url, conf).then(function (response) {
-        return Promise.resolve(response);
-      })["catch"](function (error) {
-        return Promise.reject(error);
-      });
-    }
-  }, {
-    key: "post",
-    value: function post(url) {
-      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var conf = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-      return this.client.post(url, data, conf).then(function (response) {
-        return Promise.resolve(response);
-      })["catch"](function (error) {
-        return Promise.reject(error);
-      });
-    }
-  }, {
-    key: "put",
-    value: function put(url) {
-      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var conf = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-      return this.client.put(url, data, conf).then(function (response) {
-        return Promise.resolve(response);
-      })["catch"](function (error) {
-        return Promise.reject(error);
-      });
-    }
-  }, {
-    key: "patch",
-    value: function patch(url) {
-      var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var conf = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-      return this.client.patch(url, data, conf).then(function (response) {
-        return Promise.resolve(response);
-      })["catch"](function (error) {
-        return Promise.reject(error);
-      });
-    }
-  }]);
-
-  return ApiClient;
-}();
-
-
-/**
- * Base HTTP Client
- */
-
+var client = new _apiClient__WEBPACK_IMPORTED_MODULE_0__["ApiClient"]();
+var SECTION_URL = "/classrooms";
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // Provide request methods with the default base_url
-  get: function get(url) {
-    var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    return getClient().get(url, conf).then(function (response) {
-      return Promise.resolve(response);
-    })["catch"](function (error) {
-      return Promise.reject(error);
-    });
+  getClassrooms: function getClassrooms() {
+    return client.get(SECTION_URL);
   },
-  "delete": function _delete(url) {
-    var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    return getClient()["delete"](url, conf).then(function (response) {
-      return Promise.resolve(response);
-    })["catch"](function (error) {
-      return Promise.reject(error);
-    });
-  },
-  head: function head(url) {
-    var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    return getClient().head(url, conf).then(function (response) {
-      return Promise.resolve(response);
-    })["catch"](function (error) {
-      return Promise.reject(error);
-    });
-  },
-  options: function options(url) {
-    var conf = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    return getClient().options(url, conf).then(function (response) {
-      return Promise.resolve(response);
-    })["catch"](function (error) {
-      return Promise.reject(error);
-    });
-  },
-  post: function post(url) {
-    var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var conf = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    return getClient().post(url, data, conf).then(function (response) {
-      return Promise.resolve(response);
-    })["catch"](function (error) {
-      return Promise.reject(error);
-    });
-  },
-  put: function put(url) {
-    var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var conf = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    return getClient().put(url, data, conf).then(function (response) {
-      return Promise.resolve(response);
-    })["catch"](function (error) {
-      return Promise.reject(error);
-    });
-  },
-  patch: function patch(url) {
-    var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var conf = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    return getClient().patch(url, data, conf).then(function (response) {
-      return Promise.resolve(response);
-    })["catch"](function (error) {
-      return Promise.reject(error);
-    });
+  addClassroom: function addClassroom(data) {
+    return client.post(SECTION_URL, data);
   }
 });
 
@@ -305,72 +81,23 @@ var CustomButton = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[
 
 /***/ }),
 
-/***/ "./resources/js/components/src/components/Inputs/TextField.js":
-/*!********************************************************************!*\
-  !*** ./resources/js/components/src/components/Inputs/TextField.js ***!
-  \********************************************************************/
+/***/ "./resources/js/components/src/components/layout/CustomSnackbar.js":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/src/components/layout/CustomSnackbar.js ***!
+  \*************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CustomSnackbar; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js");
-/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/FormControl */ "./node_modules/@material-ui/core/esm/FormControl/index.js");
-/* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
-
-
-
-
-
-var CssTextField = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])({
-  root: {
-    "& label.Mui-focused": {
-      color: "teal"
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "teal"
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "red"
-      },
-      "&:hover fieldset": {
-        borderColor: "yellow"
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "teal"
-      }
-    }
-  }
-})(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_2__["default"]);
-/* harmony default export */ __webpack_exports__["default"] = (CssTextField);
-
-/***/ }),
-
-/***/ "./resources/js/components/src/components/layout/Heading.js":
-/*!******************************************************************!*\
-  !*** ./resources/js/components/src/components/layout/Heading.js ***!
-  \******************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
-/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
-/* harmony import */ var _material_ui_core_Link__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Link */ "./node_modules/@material-ui/core/esm/Link/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/icons/Add */ "./node_modules/@material-ui/icons/Add.js");
-/* harmony import */ var _material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_Snackbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Snackbar */ "./node_modules/@material-ui/core/esm/Snackbar/index.js");
+/* harmony import */ var _material_ui_lab_Alert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/lab/Alert */ "./node_modules/@material-ui/lab/esm/Alert/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
 
@@ -378,65 +105,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+function Alert(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_lab_Alert__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({
+    elevation: 6,
+    variant: "filled"
+  }, props));
+}
 
-
-
-var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_7__["makeStyles"])(function (theme) {
+var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__["makeStyles"])(function (theme) {
   return {
     root: {
-      padding: theme.spacing(2)
+      width: "100%",
+      "& > * + *": {
+        marginTop: theme.spacing(2)
+      }
     }
   };
 });
-var ActionButton = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_7__["withStyles"])(function (theme) {
-  return {
-    root: {
-      color: theme.palette.getContrastText(_material_ui_core_colors__WEBPACK_IMPORTED_MODULE_9__["teal"][500]),
-      backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_9__["teal"][500],
-      "&:hover": {
-        backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_9__["teal"][700]
-      }
-    }
-  };
-})(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_6__["default"]);
-
-var Heading = function Heading(_ref) {
-  var title = _ref.title,
-      action = _ref.action,
-      actionLabel = _ref.actionLabel,
-      disableAction = _ref.disableAction;
+function CustomSnackbar(_ref) {
+  var open = _ref.open,
+      message = _ref.message,
+      handleClose = _ref.handleClose;
   var classes = useStyles();
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_1__["default"], {
-    elevation: 2,
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: classes.root
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    container: true,
-    alignItems: "center",
-    justify: "space-between"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    item: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    variant: "h4",
-    color: "textSecondary"
-  }, title)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    item: true
-  }, !disableAction && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ActionButton, {
-    component: react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"],
-    to: action,
-    variant: "contained",
-    disableElevation: true,
-    startIcon: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_8___default.a, null)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_3__["default"], null, actionLabel)))));
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Heading);
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Snackbar__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    open: open,
+    autoHideDuration: 6000,
+    onClose: handleClose
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
+    onClose: handleClose,
+    severity: "success"
+  }, message)));
+}
 
 /***/ }),
 
-/***/ "./resources/js/components/src/containers/Admin/Curricullum/Add.js":
-/*!*************************************************************************!*\
-  !*** ./resources/js/components/src/containers/Admin/Curricullum/Add.js ***!
-  \*************************************************************************/
+/***/ "./resources/js/components/src/containers/Admin/Subjects/Add.js":
+/*!**********************************************************************!*\
+  !*** ./resources/js/components/src/containers/Admin/Subjects/Add.js ***!
+  \**********************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -454,16 +162,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
 /* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
-/* harmony import */ var formik__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
-/* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! yup */ "./node_modules/yup/es/index.js");
-/* harmony import */ var _material_ui_core_CircularProgress__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/CircularProgress */ "./node_modules/@material-ui/core/esm/CircularProgress/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var _api_curricullumClient__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../api/curricullumClient */ "./resources/js/components/src/api/curricullumClient.js");
+/* harmony import */ var _components_Inputs_MultiSelect__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../components/Inputs/MultiSelect */ "./resources/js/components/src/components/Inputs/MultiSelect.js");
+/* harmony import */ var _material_ui_core_Stepper__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/Stepper */ "./node_modules/@material-ui/core/esm/Stepper/index.js");
+/* harmony import */ var _material_ui_core_Step__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/Step */ "./node_modules/@material-ui/core/esm/Step/index.js");
+/* harmony import */ var _material_ui_core_StepLabel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/StepLabel */ "./node_modules/@material-ui/core/esm/StepLabel/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @material-ui/icons/Add */ "./node_modules/@material-ui/icons/Add.js");
+/* harmony import */ var _material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _Forms_Basic__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./Forms/Basic */ "./resources/js/components/src/containers/Admin/Subjects/Forms/Basic.js");
+/* harmony import */ var _Forms_Media__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Forms/Media */ "./resources/js/components/src/containers/Admin/Subjects/Forms/Media.js");
+/* harmony import */ var _Forms_Seo__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Forms/Seo */ "./resources/js/components/src/containers/Admin/Subjects/Forms/Seo.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _components_layout_CustomSnackbar__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../../../components/layout/CustomSnackbar */ "./resources/js/components/src/components/layout/CustomSnackbar.js");
+/* harmony import */ var formik__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
+/* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! yup */ "./node_modules/yup/es/index.js");
+/* harmony import */ var _api_subjectClient__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../../../api/subjectClient */ "./resources/js/components/src/api/subjectClient.js");
+/* harmony import */ var _api_curricullumClient__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../../../api/curricullumClient */ "./resources/js/components/src/api/curricullumClient.js");
+/* harmony import */ var _api_classroomClient__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../../../api/classroomClient */ "./resources/js/components/src/api/classroomClient.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_27___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_27__);
 
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -481,6 +204,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -497,184 +221,366 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var CurricullumAdd = function CurricullumAdd() {
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(false),
+
+
+
+
+
+
+
+
+
+
+
+
+var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_15__["makeStyles"])(function (theme) {
+  return {
+    appBar: {
+      position: "relative"
+    },
+    layout: _defineProperty({
+      width: "auto",
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2)
+    }, theme.breakpoints.up(600 + theme.spacing(2) * 2), {
+      width: 600,
+      marginLeft: "auto",
+      marginRight: "auto"
+    }),
+    paper: _defineProperty({
+      marginTop: theme.spacing(3),
+      marginBottom: theme.spacing(3),
+      padding: theme.spacing(2)
+    }, theme.breakpoints.up(600 + theme.spacing(3) * 2), {
+      marginTop: theme.spacing(6),
+      marginBottom: theme.spacing(6),
+      padding: theme.spacing(3)
+    }),
+    stepper: {
+      padding: theme.spacing(3, 0, 5)
+    },
+    buttons: {
+      display: "flex",
+      justifyContent: "flex-end"
+    },
+    button: {
+      marginTop: theme.spacing(3),
+      marginLeft: theme.spacing(1)
+    },
+    inputSpacer: {
+      marginBottom: theme.spacing(2)
+    }
+  };
+});
+var steps = ["Basic", "Media", "Seo"];
+
+var SubjectAdd = function SubjectAdd() {
+  var history = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_20__["useHistory"])();
+  var classes = useStyles();
+
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(0),
       _React$useState2 = _slicedToArray(_React$useState, 2),
-      submitted = _React$useState2[0],
-      setSubmitted = _React$useState2[1];
+      activeStep = _React$useState2[0],
+      setActiveStep = _React$useState2[1];
 
   var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(false),
       _React$useState4 = _slicedToArray(_React$useState3, 2),
-      isSubmitting = _React$useState4[0],
-      setSubmitting = _React$useState4[1];
+      isSuccess = _React$useState4[0],
+      setIsSuccess = _React$useState4[1];
 
-  var history = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["useHistory"])();
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(false),
+      _React$useState6 = _slicedToArray(_React$useState5, 2),
+      message = _React$useState6[0],
+      setMessage = _React$useState6[1];
 
-  var _useRouteMatch = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_14__["useRouteMatch"])(),
-      path = _useRouteMatch.path,
-      url = _useRouteMatch.url;
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(false),
+      _React$useState8 = _slicedToArray(_React$useState7, 2),
+      isSubmitted = _React$useState8[0],
+      setSubmitted = _React$useState8[1];
 
-  function createCurricullum(_x, _x2) {
-    return _createCurricullum.apply(this, arguments);
-  }
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState(true),
+      _React$useState10 = _slicedToArray(_React$useState9, 2),
+      isLoading = _React$useState10[0],
+      setLoading = _React$useState10[1];
 
-  function _createCurricullum() {
-    _createCurricullum = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(data, formik) {
-      var response;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              console.log(data);
-              _context.prev = 1;
-              _context.next = 4;
-              return _api_curricullumClient__WEBPACK_IMPORTED_MODULE_15__["default"].addCurricullum(data);
+  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState([]),
+      _React$useState12 = _slicedToArray(_React$useState11, 2),
+      curricullums = _React$useState12[0],
+      setCurricullums = _React$useState12[1];
 
-            case 4:
-              response = _context.sent;
-              console.log(response.data);
-              history.push("/admin/curricullums");
-              _context.next = 13;
-              break;
+  var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_1___default.a.useState([]),
+      _React$useState14 = _slicedToArray(_React$useState13, 2),
+      classrooms = _React$useState14[0],
+      setClassrooms = _React$useState14[1];
 
-            case 9:
-              _context.prev = 9;
-              _context.t0 = _context["catch"](1);
-              console.log("response", _context.t0.response);
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+    name: "",
+    display_name: "",
+    short_description: "",
+    description: "",
+    classroom_id: undefined,
+    curricullum_id: undefined
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      basicForm = _useState2[0],
+      setBasicForm = _useState2[1];
 
-              if (_context.t0.response.data.errors) {
-                if (_context.t0.response.data.errors.name) {
-                  formik.setFieldError("name", _context.t0.response.data.errors.name[0]);
-                }
-              }
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+    preview_url: ""
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      mediaForm = _useState4[0],
+      setMediaForm = _useState4[1];
 
-            case 13:
-              setSubmitting(false);
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
+    meta_tags: [],
+    meta_description: ""
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      seoForm = _useState6[0],
+      setSeoForm = _useState6[1];
 
-            case 14:
-            case "end":
-              return _context.stop();
+  var handleNext = function handleNext() {
+    if (activeStep == steps.length - 1) {
+      setMessage("Subject added successfully!");
+      setIsSuccess(true);
+    }
+
+    setActiveStep(activeStep + 1);
+  };
+
+  var handleBack = function handleBack() {
+    setActiveStep(activeStep - 1);
+  };
+
+  react__WEBPACK_IMPORTED_MODULE_1___default.a.useEffect(function () {
+    function getInitialData() {
+      return _getInitialData.apply(this, arguments);
+    }
+
+    function _getInitialData() {
+      _getInitialData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var curricullumResponse, classroomResponse;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return _api_curricullumClient__WEBPACK_IMPORTED_MODULE_25__["default"].getCurricullums();
+
+              case 3:
+                curricullumResponse = _context.sent;
+                _context.next = 6;
+                return _api_classroomClient__WEBPACK_IMPORTED_MODULE_26__["default"].getClassrooms();
+
+              case 6:
+                classroomResponse = _context.sent;
+                setCurricullums(curricullumResponse.data.data);
+                setClassrooms(classroomResponse.data.data);
+                _context.next = 14;
+                break;
+
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
+
+              case 14:
+                setLoading(false);
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
           }
-        }
-      }, _callee, null, [[1, 9]]);
-    }));
-    return _createCurricullum.apply(this, arguments);
-  }
+        }, _callee, null, [[0, 11]]);
+      }));
+      return _getInitialData.apply(this, arguments);
+    }
 
+    getInitialData();
+  }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_layout_Heading__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    title: "Add Curriclullum",
+    title: "Add Subject",
     disableAction: true
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_10__["Formik"], {
-    initialValues: {
-      name: ""
-    },
-    validationSchema: yup__WEBPACK_IMPORTED_MODULE_11__["object"]({
-      name: yup__WEBPACK_IMPORTED_MODULE_11__["string"]().max(200).required("Required")
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    elevation: 2,
+    className: classes.paper
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    component: "h1",
+    variant: "h4",
+    align: "center"
+  }, "Add New Subject"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Stepper__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    activeStep: activeStep,
+    className: classes.stepper
+  }, steps.map(function (label) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Step__WEBPACK_IMPORTED_MODULE_12__["default"], {
+      key: label
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_StepLabel__WEBPACK_IMPORTED_MODULE_13__["default"], null, label));
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_9__["Container"], {
+    maxWidth: "md"
+  }, isLoading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_9__["CircularProgress"], null)) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, activeStep == 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_22__["Formik"], {
+    initialValues: basicForm,
+    validationSchema: yup__WEBPACK_IMPORTED_MODULE_23__["object"]({
+      name: yup__WEBPACK_IMPORTED_MODULE_23__["string"]().max(200).required(),
+      display_name: yup__WEBPACK_IMPORTED_MODULE_23__["string"]().max(200).required(),
+      short_description: yup__WEBPACK_IMPORTED_MODULE_23__["string"]().max(255),
+      description: yup__WEBPACK_IMPORTED_MODULE_23__["string"]().max(2000),
+      curricullum_id: yup__WEBPACK_IMPORTED_MODULE_23__["number"]().required(),
+      classroom_id: yup__WEBPACK_IMPORTED_MODULE_23__["number"]().required()
     }),
     onSubmit: function onSubmit(values, formik) {
-      setSubmitting(true);
-      createCurricullum(values, formik);
+      console.log({
+        values: values
+      });
+      setBasicForm(values);
+      handleNext();
     }
   }, function (formik) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
-      onSubmit: formik.handleSubmit,
-      style: {
-        marginTop: 24
-      }
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      elevation: 2
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_9__["Container"], {
-      maxWidth: "sm"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      container: true,
-      direction: "column",
-      spacing: 3
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      item: true,
-      xs: 12
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Inputs_TextField__WEBPACK_IMPORTED_MODULE_2__["default"], _extends({
-      fullWidth: true,
-      variant: "standard",
-      label: "Curricullum Title",
-      id: "name",
-      helperText: formik.errors.name
-    }, formik.getFieldProps("name"), {
-      error: formik.touched.name && formik.errors.name // helperText="Incorrect entry."
-
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      item: true
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      style: {
-        display: "flex",
-        justifyContent: "flex-end"
-      }
+      onSubmit: formik.handleSubmit
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Forms_Basic__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      classrooms: classrooms,
+      curricullums: curricullums,
+      formik: formik
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: classes.buttons
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Inputs_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
       type: "submit",
-      size: "large",
       variant: "contained",
-      disabled: isSubmitting
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_7__["default"], null, "Submit", isSubmitting && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_CircularProgress__WEBPACK_IMPORTED_MODULE_12__["default"], {
-      style: {
-        marginLeft: 8
-      },
-      size: 12
-    })))))))));
+      color: "primary" // onClick={handleNext}
+      ,
+      className: classes.button
+    }, "Next")));
+  }), activeStep == 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_22__["Formik"], {
+    initialValues: mediaForm,
+    validationSchema: yup__WEBPACK_IMPORTED_MODULE_23__["object"]({
+      preview_url: yup__WEBPACK_IMPORTED_MODULE_23__["string"]()
+    }),
+    onSubmit: function onSubmit(values, formik) {
+      console.log({
+        values: values
+      });
+      setMediaForm(values);
+      handleNext();
+    }
+  }, function (formik) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+      onSubmit: formik.handleSubmit
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Forms_Media__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      formik: formik
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: classes.buttons
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_14__["default"], {
+      onClick: handleBack,
+      className: classes.button
+    }, "Back"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Inputs_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      type: "submit",
+      variant: "contained",
+      color: "primary" // onClick={handleNext}
+      ,
+      className: classes.button
+    }, "Next")));
+  }), activeStep == 2 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_22__["Formik"], {
+    initialValues: seoForm,
+    validationSchema: yup__WEBPACK_IMPORTED_MODULE_23__["object"]({
+      meta_tags: yup__WEBPACK_IMPORTED_MODULE_23__["array"](),
+      meta_description: yup__WEBPACK_IMPORTED_MODULE_23__["string"]()
+    }),
+    onSubmit: /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(values, formik) {
+        var submitValues, formData, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                setSeoForm(values);
+                submitValues = _objectSpread(_objectSpread(_objectSpread({}, mediaForm), values), basicForm);
+                console.log({
+                  values: submitValues
+                });
+                setSubmitted(true);
+                formData = new FormData();
+                Object.keys(submitValues).forEach(function (key) {
+                  formData.append(key, submitValues[key]);
+                });
+                _context2.prev = 6;
+                _context2.next = 9;
+                return axios__WEBPACK_IMPORTED_MODULE_27___default.a.post("/api/subjects", formData, {
+                  headers: {
+                    "Content-Type": "multipart/formdata"
+                  }
+                });
+
+              case 9:
+                response = _context2.sent;
+                console.log({
+                  response: response.data
+                });
+                history.push("/admin/subjects/" + response.data.data.id);
+                _context2.next = 17;
+                break;
+
+              case 14:
+                _context2.prev = 14;
+                _context2.t0 = _context2["catch"](6);
+                console.log({
+                  err: _context2.t0
+                });
+
+              case 17:
+                setSubmitted(false);
+
+              case 18:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[6, 14]]);
+      }));
+
+      return function (_x, _x2) {
+        return _ref.apply(this, arguments);
+      };
+    }()
+  }, function (formik) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+      onSubmit: formik.handleSubmit
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Forms_Seo__WEBPACK_IMPORTED_MODULE_19__["default"], {
+      formik: formik
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: classes.buttons
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_14__["default"], {
+      onClick: handleBack,
+      className: classes.button
+    }, "Back"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Inputs_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      type: "submit",
+      variant: "contained",
+      color: "primary",
+      disabled: isSubmitted // onClick={handleNext}
+      ,
+      className: classes.button
+    }, "Submit", " ", isSubmitted && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_9__["CircularProgress"], {
+      size: 15,
+      color: "primary"
+    }))));
+  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_layout_CustomSnackbar__WEBPACK_IMPORTED_MODULE_21__["default"], {
+    open: isSuccess,
+    message: message,
+    handleClose: function handleClose() {
+      return setIsSuccess(false);
+    }
   }));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (CurricullumAdd);
-
-/***/ }),
-
-/***/ "./resources/js/components/src/index.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/src/index.js ***!
-  \**********************************************/
-/*! exports provided: store, default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "store", function() { return store; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./App */ "./resources/js/components/src/App.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _redux_configureStore__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./redux/configureStore */ "./resources/js/components/src/redux/configureStore.js");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
-/* harmony import */ var _material_ui_core_CssBaseline__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/CssBaseline */ "./node_modules/@material-ui/core/esm/CssBaseline/index.js");
-
-
-
-
-
-
-
-
-var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_5__["createMuiTheme"])({
-  palette: {
-    primary: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_6__["teal"]
-  }
-});
-var store = Object(_redux_configureStore__WEBPACK_IMPORTED_MODULE_4__["default"])({});
-
-function Index() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_3__["Provider"], {
-    store: store
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_5__["ThemeProvider"], {
-    theme: theme
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_CssBaseline__WEBPACK_IMPORTED_MODULE_7__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_App__WEBPACK_IMPORTED_MODULE_2__["default"], null)));
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Index);
-console.log("store=", store);
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Index, null), document.getElementById("app")); // If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-// serviceWorker.unregister();
+/* harmony default export */ __webpack_exports__["default"] = (SubjectAdd);
 
 /***/ })
 

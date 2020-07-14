@@ -1994,10 +1994,10 @@ __webpack_require__.r(__webpack_exports__);
 // import SubjectEdit from "./Edit";
 
 var SubjectList = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(5), __webpack_require__.e(27)]).then(__webpack_require__.bind(null, /*! ./List */ "./resources/js/components/src/containers/Admin/Subjects/List.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(3), __webpack_require__.e(27)]).then(__webpack_require__.bind(null, /*! ./List */ "./resources/js/components/src/containers/Admin/Subjects/List.js"));
 });
 var SubjectAdd = /*#__PURE__*/Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(29), __webpack_require__.e(13)]).then(__webpack_require__.bind(null, /*! ./Add */ "./resources/js/components/src/containers/Admin/Subjects/Add.js"));
+  return Promise.all(/*! import() */[__webpack_require__.e(14), __webpack_require__.e(18)]).then(__webpack_require__.bind(null, /*! ./Add */ "./resources/js/components/src/containers/Admin/Subjects/Add.js"));
 });
 
 var Subject = function Subject() {

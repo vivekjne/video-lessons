@@ -19,7 +19,7 @@ import { useParams } from "react-router-dom";
 import subjectClient from "../../../api/subjectClient";
 import { CircularProgress } from "@material-ui/core";
 import TimelineNav from "./TimelineNav";
-
+import { Link } from "react-router-dom";
 const useStyles = makeStyles(theme => ({
     bannerContainer: {
         height: "50vh",
@@ -84,6 +84,11 @@ export default function SubjectDetail() {
                             <Button
                                 variant="contained"
                                 className={classes.bannerButton}
+                                component={Link}
+                                to={
+                                    data &&
+                                    `/subject/${data.slug}/${data.id}/lesson/${data.sections[0].lessons[0].id}`
+                                }
                             >
                                 <Typography color={indigo[500]}>
                                     Start Watching
@@ -169,6 +174,7 @@ export default function SubjectDetail() {
                             <TimelineSections
                                 key={section.id}
                                 item={section}
+                                data={data}
                                 number={index + 1}
                             />
                         ))}
